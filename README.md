@@ -4,7 +4,7 @@
 **Aplikasi Sistem Penjadwalan Kereta Api**
 
 ## Cara Menjalankan Program
-1. **Fork repositori** ini atau **Download as a ZIP** lalu ekstrak zip nya
+1. **Fork repositori** ini atau bisa dengan **Download ZIP**, lalu ekstrak ZIP nya
 2. Untuk kompilasi, jalankan command di bawah ini:
 ```
 g++ -std=c++17 -Iinclude src/*.cpp src/data_structure/*.cpp src/management/*.cpp -o SISTEMKAI
