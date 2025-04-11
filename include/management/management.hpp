@@ -1,6 +1,6 @@
 // Header untuk sistem manajemen kereta api
-#ifndef MANAGEMENT_HPP
-#define MANAGEMENT_HPP
+#pragma once
+#include <string>
 
 #include "../data_structure/stack.hpp"
 #include "../data_structure/queue.hpp"
@@ -45,5 +45,3 @@ public:
     std::string generateKodeJadwal(const std::string& namaKereta, const std::string& stasiunAsal, const std::string& stasiunTujuan, const std::string& tanggal);
     std::string generatePNR() const;
 };
-
-#endif
