@@ -1,4 +1,3 @@
-// include/data_structure/queue.hpp
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
@@ -16,13 +15,14 @@ private:
     };
     Node* front;
     Node* rear;
+    size_t count;  // Added to track size
     
 public:
     Queue();
     ~Queue();
-    void enqueue(T val);
+    void enqueue(const T& val);
     void dequeue();
-    T peek() const;
+    const T& peek() const;
     bool isEmpty() const;
     size_t size() const;
 };

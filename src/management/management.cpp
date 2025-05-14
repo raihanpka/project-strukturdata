@@ -136,20 +136,19 @@ void ManagementSystem::tampilkanJadwal(const std::string& filterTanggal) const {
     }
     std::cout << "\nJadwal Kereta API" << headerDate << "\n";
     std::cout << "+----------------+-----------------+-----------------+--------------------------+-------------+-------------+\n"
-              << "| Kode         | Stasiun Asal    | Stasiun Tujuan  | Nama Kereta              | Berangkat   | Tiba        |\n"
-              << "+--------------+-----------------+-----------------+--------------------------+-------------+-------------+\n";
+              << "| Kode           | Stasiun Asal    | Stasiun Tujuan  | Nama Kereta              | Berangkat   | Tiba        |\n"
+              << "+----------------+-----------------+-----------------+--------------------------+-------------+-------------+\n";
 
     for(const auto& j : filtered) {
-        std::cout << "| " << std::setw(11) << j.kode << " | "
-                  << std::setw(15) << j.stasiunAsal << " | "
-                  << std::setw(15) << j.stasiunTujuan << " | "
-                  << std::setw(24) << j.namaKereta << " | "
-                  << std::setw(11) << j.waktuBerangkat << " | "
-                  << std::setw(11) << j.waktuTiba << " |\n";
+        std::cout << "| " << std::left << std::setw(11) << j.kode << " | "
+              << std::setw(15) << j.stasiunAsal << " | "
+              << std::setw(15) << j.stasiunTujuan << " | "
+              << std::setw(24) << j.namaKereta << " | "
+              << std::setw(11) << j.waktuBerangkat << " | "
+              << std::setw(11) << j.waktuTiba << " |\n";
     }
-    std::cout << "+--------------+-----------------+-----------------+--------------------------+-------------+-------------+\n";
+    std::cout << "+----------------+-----------------+-----------------+--------------------------+-------------+-------------+\n";
     std::cout << "\nTekan ENTER untuk melanjutkan...";
-    std::cin.ignore();
     std::cin.get();
 }
 

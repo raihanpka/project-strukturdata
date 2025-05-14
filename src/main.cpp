@@ -1,6 +1,6 @@
 // File Utama Program Sistem Kereta Api
 
-// Cara menjalankan:
+// Cara menjalankan pakai g++:
 // g++ -std=c++17 -Iinclude src/*.cpp src/data_structure/*.cpp src/management/*.cpp -o SISTEMKAI
 // ./SISTEMKAI
 

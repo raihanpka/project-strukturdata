@@ -33,6 +33,7 @@ public:
     void prosesKonfirmasi();
     void simpanKeFile() const;
     void muatDariFile();
+    
     // Metode autentikasi
     bool authenticateAdmin(const std::string& username, const std::string& password);
     void setPassengerMode();

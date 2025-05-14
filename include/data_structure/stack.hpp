@@ -1,4 +1,3 @@
-// include/data_structure/stack.hpp
 #ifndef STACK_HPP
 #define STACK_HPP
 
@@ -14,14 +13,16 @@ private:
         Node(T val) : data(val), next(nullptr) {}
     };
     Node* top;
+    size_t count;  // Added to track size
     
 public:
-    Stack() : top(nullptr) {}
+    Stack() : top(nullptr), count(0) {}
     ~Stack();
-    void push(T val);
+    void push(const T& val);
     void pop();
-    T peek() const;
+    const T& peek() const;
     bool isEmpty() const;
+    size_t size() const;
 };
 
 #endif

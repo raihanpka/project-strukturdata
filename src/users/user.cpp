@@ -22,8 +22,7 @@ void menuUser(ManagementSystem& sys) {
         cout << WHITE 
                 << "\nMenu Penumpang:\n"
                 << "1. Lihat Jadwal\n"
-                << "2. Pesan Tiket\n"
-                << "3. Kembali\n"
+                << "2. Kembali\n"
                 << "Pilih: ";
         cin >> choice;
         
@@ -48,28 +47,10 @@ void menuUser(ManagementSystem& sys) {
                 sys.tampilkanJadwal(tanggal);
                 break;
             }
-            case 2: {
-                Pemesanan p;
-                cout << "Nama Penumpang: ";
-                cin.ignore();
-                getline(cin, p.namaPenumpang);
-                cout << "Nomor Kursi: ";
-                getline(cin, p.nomorKursi);
-                cout << "Kode Kereta: ";
-                getline(cin, p.kodeKereta);
-                p.pnr = sys.generatePNR();
-                
-                try {
-                    sys.pesanTiket(p);
-                    sys.prosesKonfirmasi();
-                } catch(const exception& e) {
-                    cerr << "Error: " << e.what() << "\n";
-                }
-                break;
-            }
-            default:
+            default: {
                 cout << "Pilihan tidak valid!\n";
                 break;
+            }
         }
-    } while(choice != 3);
+    } while(choice != 2);
 }

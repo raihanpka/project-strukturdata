@@ -1,4 +1,3 @@
-// src/data_structure/queue.cpp
 #include "../include/data_structure/queue.hpp"
 #include "../include/data.hpp"
 #include <string>
@@ -6,7 +5,7 @@
 
 
 template <typename T>
-Queue<T>::Queue() : front(nullptr), rear(nullptr) {}
+Queue<T>::Queue() : front(nullptr), rear(nullptr), count(0) {}
 
 template <typename T>
 Queue<T>::~Queue() {
@@ -14,11 +13,12 @@ Queue<T>::~Queue() {
 }
 
 template <typename T>
-void Queue<T>::enqueue(T val) {
+void Queue<T>::enqueue(const T& val) {
     Node* newNode = new Node(val);
     if(rear) rear->next = newNode;
     rear = newNode;
     if(!front) front = rear;
+    ++count;
 }
 
 template <typename T>
@@ -28,10 +28,11 @@ void Queue<T>::dequeue() {
     front = front->next;
     delete temp;
     if(!front) rear = nullptr;
+    --count;
 }
 
 template <typename T>
-T Queue<T>::peek() const {
+const T& Queue<T>::peek() const {
     if(!front) throw std::runtime_error("Queue is empty");
     return front->data;
 }
@@ -43,12 +44,6 @@ bool Queue<T>::isEmpty() const {
 
 template <typename T>
 size_t Queue<T>::size() const {
-    size_t count = 0;
-    Node* current = front;
-    while(current) {
-        count++;
-        current = current->next;
-    }
     return count;
 }
 

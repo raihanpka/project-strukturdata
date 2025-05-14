@@ -15,7 +15,7 @@ void clrscr() {
 }
 
 void pause_input() {
-    cout << "Tekan enter untuk melanjutkan...";
+    cout << "Tekan ENTER untuk melanjutkan...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cin.get();
 }

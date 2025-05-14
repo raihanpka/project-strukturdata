@@ -1,4 +1,3 @@
-// include/constants/file_path.hpp
 #ifndef FILE_PATH_HPP
 #define FILE_PATH_HPP
 

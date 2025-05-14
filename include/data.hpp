@@ -1,4 +1,3 @@
-// include/data.hpp
 #ifndef DATA_HPP
 #define DATA_HPP
 

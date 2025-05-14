@@ -22,8 +22,9 @@ void menuAdmin(ManagementSystem& sys) {
         cout << WHITE  
                 << "\nMenu Admin:\n"
                 << "1. Tambah Jadwal Kereta\n"
-                << "2. Lihat Semua Pemesanan\n"
-                << "3. Kembali\n"
+                << "2. Lihat Semua Jadwal\n"
+                << "3. Tambah Pemesanan\n"
+                << "4. Kembali\n"
                 << "Pilih: ";
         cin >> choice;
         
@@ -70,9 +71,29 @@ void menuAdmin(ManagementSystem& sys) {
                 sys.tampilkanJadwal(tanggal);
                 break;
             }
-            default:
+            case 3: {
+                Pemesanan p;
+                cout << "Nama Penumpang: ";
+                cin.ignore();
+                getline(cin, p.namaPenumpang);
+                cout << "Nomor Kursi: ";
+                getline(cin, p.nomorKursi);
+                cout << "Kode Kereta: ";
+                getline(cin, p.kodeKereta);
+                p.pnr = sys.generatePNR();
+                
+                try {
+                    sys.pesanTiket(p);
+                    sys.prosesKonfirmasi();
+                } catch(const exception& e) {
+                    cerr << "Error: " << e.what() << "\n";
+                }
+                break;
+            }
+            default: {
                 cout << "Pilihan tidak valid!\n";
                 break;
+            }
         }
-    } while(choice != 3);
+    } while(choice != 4);
 }

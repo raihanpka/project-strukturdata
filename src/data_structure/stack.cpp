@@ -1,4 +1,3 @@
-// src/data_structure/stack.cpp
 #include "data_structure/stack.hpp"
 #include "../include/data.hpp"
 #include <string>
@@ -10,10 +9,11 @@ Stack<T>::~Stack() {
 }
 
 template <typename T>
-void Stack<T>::push(T val) {
+void Stack<T>::push(const T& val) {
     Node* newNode = new Node(val);
     newNode->next = top;
     top = newNode;
+    ++count;
 }
 
 template <typename T>
@@ -22,10 +22,11 @@ void Stack<T>::pop() {
     Node* temp = top;
     top = top->next;
     delete temp;
+    --count;
 }
 
 template <typename T>
-T Stack<T>::peek() const {
+const T& Stack<T>::peek() const {
     if (!top) throw std::runtime_error("Stack is empty");
     return top->data;
 }
@@ -33,6 +34,11 @@ T Stack<T>::peek() const {
 template <typename T>
 bool Stack<T>::isEmpty() const {
     return top == nullptr;
+}
+
+template <typename T>
+size_t Stack<T>::size() const {
+    return count;
 }
 
 // Explicit instantiation for needed types
