@@ -1,53 +1,54 @@
-// File Utama Program Sistem Kereta Api
-
-// Cara menjalankan pakai g++:
-// g++ -std=c++17 -Iinclude src/*.cpp src/data_structure/*.cpp src/management/*.cpp -o SISTEMKAI
-// ./SISTEMKAI
-
-#include <management.hpp>
-#include <file_path.hpp>
-#include <data.hpp>
-#include <menu.hpp>
-#include <admin.hpp>
-#include <user.hpp>
-
+// main.cpp - Entry Point
+#include "management.hpp" // controller utama
+#include "menu.hpp"
+#include "admin.hpp"
+#include "user.hpp"
 #include <iostream>
 #include <limits>
-#include <sstream>
-#include <iomanip>
 
 using namespace std;
 
 int main() {
     ManagementSystem system;
     system.muatDariFile();
-    
-    int mainChoice;
+
+    int pilihan;
     do {
         menu_awal();
-        cin >> mainChoice;
-        
-        switch(mainChoice) {
+        cin >> pilihan;
+        switch (pilihan) {
             case 1: {
                 string username, password;
-                cout << "Username Admin: ";
-                cin >> username;
-                cout << "Password: ";
-                cin >> password;
-                
-                if (system.authenticateAdmin(username, password)) {
-                    menuAdmin(system);
-                } else {
-                    cout << "Autentikasi gagal!\n";
-                }
+                bool loginSukses = false;
+                do {
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "Username Admin: ";
+                    getline(cin, username);
+                    cout << "Password: ";
+                    getline(cin, password);
+                    if (system.getUser().authenticateAdmin(username, password)) {
+                        loginSukses = true;
+                        menuAdmin(system);
+                    } else {
+                        header();
+                        cout << "Autentikasi gagal! Coba lagi.\n";
+                        cout << "Tekan ENTER untuk melanjutkan...\n";
+                    }
+                } while (!loginSukses);
                 break;
             }
-            case 2:
+            case 2:{
+                system.getUser().setPassenger();
                 menuUser(system);
                 break;
+            }
+            case 3: {
+                cout << "Keluar dari program...\n";
+                break;
+            }
         }
-    } while(mainChoice != 3);
-    
+    } while (pilihan != 3);
+
     system.simpanKeFile();
     return 0;
 }

@@ -1,8 +1,7 @@
-#include "../include/data_structure/queue.hpp"
-#include "../include/data.hpp"
+#include "queue.hpp"
+#include "data.hpp"
 #include <string>
 #include <stdexcept>
-
 
 template <typename T>
 Queue<T>::Queue() : front(nullptr), rear(nullptr), count(0) {}

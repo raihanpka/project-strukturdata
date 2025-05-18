@@ -1,13 +1,13 @@
 #include <menu.hpp>
 #include <data.hpp>
 #include <management.hpp>
-#include <file_path.hpp>
-
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <limits>
 #include <iomanip>
+
+using namespace std;
 
 void menuUser(ManagementSystem& sys) {
     int choice;
@@ -22,7 +22,8 @@ void menuUser(ManagementSystem& sys) {
         cout << WHITE 
                 << "\nMenu Penumpang:\n"
                 << "1. Lihat Jadwal\n"
-                << "2. Kembali\n"
+                << "2. Cari Tiket Penumpang\n"
+                << "3. Kembali\n"
                 << "Pilih: ";
         cin >> choice;
         
@@ -33,18 +34,35 @@ void menuUser(ManagementSystem& sys) {
                     cout << "Masukkan tanggal (DD-MM-YYYY): ";
                     cin.ignore();
                     getline(cin, tanggal);
-                    
+
                     // Memvalidasi format tanggal (DD-MM-YYYY)
                     tm tm = {};
                     istringstream ss(tanggal);
-                    ss >> get_time(&tm, "%d-%m-%Y");
+                    ss >> get_time(&tm, "%d-%m-%Y"); // Perbaiki format: %m (bukan %mm)
                     if (ss.fail()) {
                         cout << "Format tanggal tidak valid. Gunakan format DD-MM-YYYY\n";
+                        cout << "Tekan ENTER untuk melanjutkan...";
+                        cin.clear();
+                        cin.get();
                         continue;
                     }
                     break;
                 } while(true);
-                sys.tampilkanJadwal(tanggal);
+                sys.getJadwalManager().tampilkanJadwal(tanggal);
+                break;
+            }
+            case 2: {
+                string pnr;
+                cout << "Masukkan PNR Tiket: ";
+                cin.ignore();
+                getline(cin, pnr);
+                if (pnr.empty()) {
+                    cout << "PNR tidak boleh kosong!\n";
+                    cout << "Tekan ENTER untuk melanjutkan...";
+                    cin.get();
+                    continue;
+                }
+                sys.getTiketManager().tampilkanTiketByPNR(pnr);
                 break;
             }
             default: {
@@ -52,5 +70,5 @@ void menuUser(ManagementSystem& sys) {
                 break;
             }
         }
-    } while(choice != 2);
+    } while(choice != 3);
 }

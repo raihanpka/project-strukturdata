@@ -4,7 +4,6 @@
 #include <cstddef>
 #include <stdexcept>
 
-
 template <typename T>
 class Queue {
 private:

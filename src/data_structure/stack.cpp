@@ -1,5 +1,5 @@
-#include "data_structure/stack.hpp"
-#include "../include/data.hpp"
+#include "stack.hpp"
+#include "data.hpp"
 #include <string>
 #include <stdexcept>
 

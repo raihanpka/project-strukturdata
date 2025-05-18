@@ -6,3 +6,4 @@
 void pause_input();
 void clrscr();
 void menu_awal();
+void header();

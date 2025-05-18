@@ -1,13 +1,13 @@
 #include <menu.hpp>
 #include <data.hpp>
 #include <management.hpp>
-#include <file_path.hpp>
-
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <limits>
 #include <iomanip>
+
+using namespace std;
 
 void menuAdmin(ManagementSystem& sys) {
     int choice;
@@ -22,8 +22,8 @@ void menuAdmin(ManagementSystem& sys) {
         cout << WHITE  
                 << "\nMenu Admin:\n"
                 << "1. Tambah Jadwal Kereta\n"
-                << "2. Lihat Semua Jadwal\n"
-                << "3. Tambah Pemesanan\n"
+                << "2. Pesan Tiket Penumpang\n"
+                << "3. Lihat Semua Jadwal\n"
                 << "4. Kembali\n"
                 << "Pilih: ";
         cin >> choice;
@@ -45,20 +45,57 @@ void menuAdmin(ManagementSystem& sys) {
                 cout << "Waktu Tiba: ";
                 getline(cin, j.waktuTiba);
                 
-                j.kode = sys.generateKodeJadwal(j.namaKereta, j.stasiunAsal, j.stasiunTujuan, j.tanggal);
+                j.kode = sys.getJadwalManager().generateKodeJadwal(j.namaKereta, j.stasiunAsal, j.stasiunTujuan, j.tanggal);
                 cout << "Kode Kereta yang digenerate: " << j.kode << "\n";
-                
-                sys.tambahJadwal(j);
+                cout << "Jadwal berhasil ditambahkan!\n";
+                cout << "Tekan ENTER untuk melanjutkan...";
+                cin.get();
+                sys.getJadwalManager().tambahJadwal(j);
                 break;
             }
             case 2: {
+                Pemesanan p;
+                cout << "Nama Penumpang: ";
+                cin.ignore();
+                getline(cin, p.namaPenumpang);
+                cout << "Nomor Kursi: ";
+                getline(cin, p.nomorKursi);
+                cout << "Kode Kereta: ";
+                getline(cin, p.kodeKereta);
+                p.pnr = sys.getTiketManager().generatePNR();
+                cout << "PNR yang digenerate: " << p.pnr << "\n";
+                cout << "Apakah Anda yakin ingin memesan tiket? (y/n): ";
+                char confirm;
+                cin >> confirm;
+                if (confirm != 'y' && confirm != 'Y') {
+                    cout << "Pesanan dibatalkan.\n";
+                    break;
+                }
+                // Memvalidasi ketersediaan kursi
+                if (!sys.getTiketManager().isSeatAvailable(p.kodeKereta, p.nomorKursi)) {
+                    cout << "Kursi tidak tersedia!\n";
+                    break;
+                }
+                // Memproses pemesanan tiket
+                cout << "Memproses pemesanan tiket...\n";
+                cout << "Tekan ENTER untuk melanjutkan...";
+                cin.get();
+                try {
+                    sys.getTiketManager().pesanTiket(p);
+                    sys.getTiketManager().prosesKonfirmasi();
+                } catch(const exception& e) {
+                    cerr << "Error: " << e.what() << "\n";
+                }
+                break;
+            }
+            case 3: {
                 string tanggal;
                 do {
                     cout << "Masukkan tanggal (DD-MM-YYYY): ";
                     cin.ignore();
                     getline(cin, tanggal);
                     
-                // Memvalidasi format tanggal (DD-MM-YYYY)
+                    // Memvalidasi format tanggal (DD-MM-YYYY)
                     tm tm = {};
                     istringstream ss(tanggal);
                     ss >> get_time(&tm, "%d-%m-%Y");
@@ -68,26 +105,7 @@ void menuAdmin(ManagementSystem& sys) {
                     }
                     break;
                 } while(true);
-                sys.tampilkanJadwal(tanggal);
-                break;
-            }
-            case 3: {
-                Pemesanan p;
-                cout << "Nama Penumpang: ";
-                cin.ignore();
-                getline(cin, p.namaPenumpang);
-                cout << "Nomor Kursi: ";
-                getline(cin, p.nomorKursi);
-                cout << "Kode Kereta: ";
-                getline(cin, p.kodeKereta);
-                p.pnr = sys.generatePNR();
-                
-                try {
-                    sys.pesanTiket(p);
-                    sys.prosesKonfirmasi();
-                } catch(const exception& e) {
-                    cerr << "Error: " << e.what() << "\n";
-                }
+                sys.getJadwalManager().tampilkanJadwal(tanggal);
                 break;
             }
             default: {

@@ -1,6 +1,6 @@
 #include <menu.hpp>
 #include <admin.hpp>
-
+#include <user.hpp>
 #include <iostream>
 #include <limits>
 
@@ -34,4 +34,15 @@ void menu_awal() {
     cout << WHITE << "2. Login sebagai Pengguna" << endl;
     cout << WHITE << "3. Exit" << endl;
     cout << WHITE << "Masukkan pilihanmu: ";
+}
+
+void header() {
+    clrscr();
+    cout << BLUE << " _____ _____ _____ _____ ________  ___ _   __  ___  _____ " << endl;
+    cout << BLUE << "/  ___|_   _/  ___|_   _|  ___|  \\/  || | / / / _ \\|_   _|" << endl;
+    cout << BLUE << "\\ `--.  | | \\ `--.  | | | |__ | .  . || |/ / / /_\\ \\ | |  " << endl;
+    cout << BLUE << " `--. \\ | |  `--. \\ | | |  __|| |\\/| ||    \\ |  _  | | |  " << endl;
+    cout << BLUE << "/\\__/ /_| |_/\\__/ / | | | |___| |  | || |\\  \\| | | |_| |_ " << endl;
+    cout << BLUE << "\\____/ \\___/\\____/  \\_/ \\____/\\_|  |_/\\_| \\_/\\_| |_/\\___/ " << endl;
+    cout << WHITE << endl;
 }
