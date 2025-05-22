@@ -4,7 +4,9 @@
 #include "admin.hpp"
 #include "user.hpp"
 #include <iostream>
+#include <sstream>
 #include <limits>
+#include <cctype>
 
 using namespace std;
 
@@ -16,6 +18,17 @@ int main() {
     do {
         menu_awal();
         cin >> pilihan;
+        
+        // Validasi apakah input adalah angka
+        if (cin.fail()) {
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the invalid input
+            cout << "Input tidak valid. Silakan masukkan angka.\n";
+            cout << "Tekan ENTER untuk melanjutkan...";
+            cin.get();
+            continue;
+        }
+
         switch (pilihan) {
             case 1: {
                 string username, password;

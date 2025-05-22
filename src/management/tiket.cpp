@@ -24,12 +24,12 @@ void TiketManager::pesanTiket(const Pemesanan& pemesanan) {
     if (!isSeatAvailable(pemesanan.kodeKereta, pemesanan.nomorKursi)) {
         throw runtime_error("Kursi sudah dipesan!");
     }
-    konfirmasiStack.push(pemesanan);
+    konfirmasiPemesanan.push(pemesanan);
 }
 
-void TiketManager::prosesKonfirmasi() {
-    while (!konfirmasiStack.isEmpty()) {
-        Pemesanan p = konfirmasiStack.peek();
+void TiketManager::prosesKonfirmasiPemesanan() {
+    while (!konfirmasiPemesanan.isEmpty()) {
+        Pemesanan p = konfirmasiPemesanan.peek();
         cout << "\nKonfirmasi Pemesanan:\n"
              << "PNR         : " << p.pnr << "\n"
              << "Nama        : " << p.namaPenumpang << "\n"
@@ -41,12 +41,12 @@ void TiketManager::prosesKonfirmasi() {
         input = toupper(input);
         cin.ignore();
 
-        if (input == 'Y') {
+        if (input == 'Y' || input == 'y') {
             p.confirmed = true;
             daftarPemesanan.push_back(p);
             kursiTerpesan[p.kodeKereta].insert(p.nomorKursi);
         }
-        konfirmasiStack.pop();
+        konfirmasiPemesanan.pop();
     }
 }
 

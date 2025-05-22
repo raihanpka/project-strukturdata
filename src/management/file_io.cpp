@@ -7,9 +7,9 @@ using namespace std;
 void FileIO::simpanJadwal(const vector<Jadwal>& jadwalList, const string& path) {
     ofstream out(path);
     for (const auto& j : jadwalList) {
-        out << j.kode << " " << j.stasiunAsal << " " << j.stasiunTujuan << " "
-            << j.namaKereta << " " << j.tanggal << " "
-            << j.waktuBerangkat << " " << j.waktuTiba << "\n";
+        out << j.kode << "," << j.stasiunAsal << "," << j.stasiunTujuan << ","
+            << j.namaKereta << "," << j.tanggal << ","
+            << j.waktuBerangkat << "," << j.waktuTiba << "\n";
     }
 }
 
@@ -25,8 +25,8 @@ void FileIO::muatJadwal(vector<Jadwal>& jadwalList, const string& path) {
 void FileIO::simpanTiket(const vector<Pemesanan>& tiketList, const string& path) {
     ofstream out(path);
     for (const auto& t : tiketList) {
-        out << t.pnr << " " << t.namaPenumpang << " " << t.nomorKursi << " "
-            << t.kodeKereta << " " << t.confirmed << "\n";
+        out << t.pnr << "," << t.namaPenumpang << "," << t.nomorKursi << ","
+            << t.kodeKereta << "," << t.confirmed << "\n";
     }
 }
 

@@ -26,28 +26,31 @@ void menuUser(ManagementSystem& sys) {
                 << "3. Kembali\n"
                 << "Pilih: ";
         cin >> choice;
+
+        // Validasi apakah input adalah angka
+        if (cin.fail()) {
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the invalid input
+            cout << "Input tidak valid. Silakan masukkan angka.\n";
+            cout << "Tekan ENTER untuk melanjutkan...";
+            cin.get();
+            continue;
+        }
         
         switch(choice) {
             case 1: {
                 string tanggal;
-                do {
-                    cout << "Masukkan tanggal (DD-MM-YYYY): ";
-                    cin.ignore();
+                cin.ignore();
+                // Validasi tanggal dengan loop agar tidak lempar exception
+                while (true) {
+                    cout << "Masukkan Tanggal (DD-MM-YYYY): ";
                     getline(cin, tanggal);
-
-                    // Memvalidasi format tanggal (DD-MM-YYYY)
-                    tm tm = {};
-                    istringstream ss(tanggal);
-                    ss >> get_time(&tm, "%d-%m-%Y"); // Perbaiki format: %m (bukan %mm)
-                    if (ss.fail()) {
-                        cout << "Format tanggal tidak valid. Gunakan format DD-MM-YYYY\n";
-                        cout << "Tekan ENTER untuk melanjutkan...";
-                        cin.clear();
-                        cin.get();
-                        continue;
+                    if (sys.getJadwalManager().isValidTanggal(tanggal)) {
+                        break;
+                    } else {
+                        cout << "Format tanggal tidak valid. Harus DD-MM-YYYY.\n";
                     }
-                    break;
-                } while(true);
+                }
                 sys.getJadwalManager().tampilkanJadwal(tanggal);
                 break;
             }

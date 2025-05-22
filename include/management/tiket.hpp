@@ -11,7 +11,7 @@
 
 class TiketManager {
 private:
-    Stack<Pemesanan> konfirmasiStack;
+    Stack<Pemesanan> konfirmasiPemesanan;
     std::vector<Pemesanan> daftarPemesanan;
     std::unordered_map<std::string, std::unordered_set<std::string>> kursiTerpesan;
 
@@ -20,7 +20,7 @@ public:
     bool isSeatAvailable(const std::string& kodeKereta, const std::string& seat) const;
 
     void pesanTiket(const Pemesanan& pemesanan);
-    void prosesKonfirmasi();
+    void prosesKonfirmasiPemesanan();
 
     void tampilkanTiketByPNR(const std::string& pnr) const;
 

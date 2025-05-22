@@ -6,6 +6,7 @@
 #include <sstream>
 #include <limits>
 #include <iomanip>
+#include <cctype> 
 
 using namespace std;
 
@@ -27,6 +28,16 @@ void menuAdmin(ManagementSystem& sys) {
                 << "4. Kembali\n"
                 << "Pilih: ";
         cin >> choice;
+
+        // Validasi apakah input adalah angka
+        if (cin.fail()) {
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the invalid input
+            cout << "Input tidak valid. Silakan masukkan angka.\n";
+            cout << "Tekan ENTER untuk melanjutkan...";
+            cin.get();
+            continue;
+        }
         
         switch(choice) {
             case 1: {
@@ -38,19 +49,43 @@ void menuAdmin(ManagementSystem& sys) {
                 getline(cin, j.stasiunTujuan);
                 cout << "Nama Kereta: ";
                 getline(cin, j.namaKereta);
-                cout << "Tanggal (DD-MM-YYYY): ";
-                getline(cin, j.tanggal);
-                cout << "Waktu Berangkat: ";
-                getline(cin, j.waktuBerangkat);
-                cout << "Waktu Tiba: ";
-                getline(cin, j.waktuTiba);
-                
+                // Validasi tanggal dengan loop agar tidak lempar exception
+                while (true) {
+                    cout << "Tanggal (DD-MM-YYYY): ";
+                    getline(cin, j.tanggal);
+                    if (sys.getJadwalManager().isValidTanggal(j.tanggal)) {
+                        break;
+                    } else {
+                        cout << "Format tanggal tidak valid. Harus DD-MM-YYYY.\n";
+                    }
+                }
+                // Validasi waktu dengan loop agar tidak lempar exception
+                while (true) {
+                    cout << "Waktu Berangkat (JJ:MM): ";
+                    getline(cin, j.waktuBerangkat);
+                    cout << "Waktu Tiba (JJ:MM): ";
+                    getline(cin, j.waktuTiba);
+                    if (sys.getJadwalManager().isValidWaktu(j.waktuBerangkat)) {
+                        break;
+                    } else if (sys.getJadwalManager().isValidWaktu(j.waktuTiba)) {
+                        break;
+                    } else {
+                        cout << "Format waktu tidak valid. Harus JJ:MM.\n";
+                    }
+                }
+                // Menggenerate kode jadwal
                 j.kode = sys.getJadwalManager().generateKodeJadwal(j.namaKereta, j.stasiunAsal, j.stasiunTujuan, j.tanggal);
-                cout << "Kode Kereta yang digenerate: " << j.kode << "\n";
-                cout << "Jadwal berhasil ditambahkan!\n";
+                cout << "\nKode Kereta yang digenerate: " << j.kode << "\n";
+                // Memproses pemesanan tiket
+                cout << "\nMemproses pemesanan tiket...\n";
+                try {
+                    sys.getJadwalManager().tambahJadwal(j);
+                    sys.getJadwalManager().prosesKonfirmasiJadwal();
+                } catch (const exception& e) {
+                    cout << "Terjadi error: " << e.what() << "\n";
+                }
                 cout << "Tekan ENTER untuk melanjutkan...";
                 cin.get();
-                sys.getJadwalManager().tambahJadwal(j);
                 break;
             }
             case 2: {
@@ -64,13 +99,6 @@ void menuAdmin(ManagementSystem& sys) {
                 getline(cin, p.kodeKereta);
                 p.pnr = sys.getTiketManager().generatePNR();
                 cout << "PNR yang digenerate: " << p.pnr << "\n";
-                cout << "Apakah Anda yakin ingin memesan tiket? (y/n): ";
-                char confirm;
-                cin >> confirm;
-                if (confirm != 'y' && confirm != 'Y') {
-                    cout << "Pesanan dibatalkan.\n";
-                    break;
-                }
                 // Memvalidasi ketersediaan kursi
                 if (!sys.getTiketManager().isSeatAvailable(p.kodeKereta, p.nomorKursi)) {
                     cout << "Kursi tidak tersedia!\n";
@@ -82,9 +110,9 @@ void menuAdmin(ManagementSystem& sys) {
                 cin.get();
                 try {
                     sys.getTiketManager().pesanTiket(p);
-                    sys.getTiketManager().prosesKonfirmasi();
+                    sys.getTiketManager().prosesKonfirmasiPemesanan();
                 } catch(const exception& e) {
-                    cerr << "Error: " << e.what() << "\n";
+                    cout << "Error: " << e.what() << "\n";
                 }
                 break;
             }
@@ -108,10 +136,14 @@ void menuAdmin(ManagementSystem& sys) {
                 sys.getJadwalManager().tampilkanJadwal(tanggal);
                 break;
             }
+            case 4 : {
+                cout << "Kembali ke menu utama...\n";
+                return;
+            }
             default: {
                 cout << "Pilihan tidak valid!\n";
-                break;
+                return;
             }
         }
-    } while(choice != 4);
+    } while(true);
 }

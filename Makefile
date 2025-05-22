@@ -1,18 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Iinclude -Iinclude/management -Iinclude/users -Iinclude/data_structure
-
-SRC = \
-    src/main.cpp \
-    src/menu.cpp \
-    src/data_structure/queue.cpp \
-    src/data_structure/stack.cpp \
-    src/management/file_io.cpp \
-    src/management/jadwal.cpp \
-    src/management/management.cpp \
-    src/management/tiket.cpp \
-    src/users/admin.cpp \
-    src/users/user_role.cpp \
-    src/users/user.cpp \
+SRC = $(wildcard src/**/*.cpp) $(wildcard src/*.cpp)
 
 OBJ = $(patsubst src/%,build/%,$(SRC:.cpp=.o))
 TARGET = SISTEMKAI

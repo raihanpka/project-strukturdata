@@ -9,9 +9,12 @@
 
 class JadwalManager {
 private:
+    Stack<Jadwal> konfirmasiJadwal;  // Stack untuk menyimpan jadwal yang dihapus
     std::vector<Jadwal> daftarJadwal;
 
 public:
+    bool isValidTanggal(const std::string& tanggal);
+    bool isValidWaktu(const std::string& waktu);
     std::string generateKodeJadwal(
         const std::string& namaKereta,
         const std::string& stasiunAsal,
@@ -21,7 +24,7 @@ public:
     void tambahJadwal(const Jadwal& jadwal);
     void tampilkanJadwal(const std::string& filterTanggal = "") const;
     void sortSchedules();
-    void undoPerubahan();
+    void prosesKonfirmasiJadwal();
 
     // Getter untuk akses baca saja (const)
     const std::vector<Jadwal>& getJadwal() const;

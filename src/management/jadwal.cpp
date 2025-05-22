@@ -7,6 +7,20 @@
 
 using namespace std;
 
+bool JadwalManager::isValidTanggal(const string& tanggal) {
+    tm tm = {};
+    istringstream ss(tanggal);
+    ss >> get_time(&tm, "%d-%m-%Y");
+    return !ss.fail();
+}
+
+bool JadwalManager::isValidWaktu(const string& waktu) {
+    tm tm = {};
+    istringstream ss(waktu);
+    ss >> get_time(&tm, "%H:%M");
+    return !ss.fail();
+}
+
 string JadwalManager::generateKodeJadwal(const string& namaKereta, const string& stasiunAsal,
                                          const string& stasiunTujuan, const string& tanggal) 
 {
@@ -23,10 +37,10 @@ string JadwalManager::generateKodeJadwal(const string& namaKereta, const string&
     if (!stasiunAsal.empty()) kode += toupper(stasiunAsal[0]);
     if (!stasiunTujuan.empty()) kode += toupper(stasiunTujuan[0]);
 
+    // Asumsikan tanggal sudah valid sebelum masuk sini
     tm tm = {};
     istringstream ss(tanggal);
     ss >> get_time(&tm, "%d-%m-%Y");
-    if (ss.fail()) throw invalid_argument("Format tanggal tidak valid");
 
     char day[3], month[3];
     strftime(day, sizeof(day), "%d", &tm);
@@ -120,8 +134,30 @@ void JadwalManager::sortSchedules() {
         });
 }
 
-void JadwalManager::undoPerubahan() {
-    if (!daftarJadwal.empty()) daftarJadwal.pop_back();
+void JadwalManager::prosesKonfirmasiJadwal() {
+    while(!konfirmasiJadwal.isEmpty()) {
+        Jadwal j = konfirmasiJadwal.peek();
+        cout << "\nKonfirmasi Jadwal:\n"
+             << "Kode         : " << j.kode << "\n"
+             << "Stasiun Asal : " << j.stasiunAsal << "\n"
+             << "Stasiun Tujuan: " << j.stasiunTujuan << "\n"
+             << "Nama Kereta  : " << j.namaKereta << "\n"
+             << "Tanggal      : " << j.tanggal << "\n"
+             << "Waktu Berangkat: " << j.waktuBerangkat << "\n"
+             << "Waktu Tiba   : " << j.waktuTiba << "\n"
+             << "Konfirmasi (Y/N)? ";
+        char input;
+        cin >> input;
+        input = toupper(input);
+        cin.ignore();
+
+        if (input == 'Y' || input == 'y') {
+            daftarJadwal.push_back(j);
+            konfirmasiJadwal.pop();
+        } else {
+            konfirmasiJadwal.pop();
+        }
+    }
 }
 
 const vector<Jadwal>& JadwalManager::getJadwal() const {
