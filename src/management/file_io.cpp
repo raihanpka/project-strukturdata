@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void FileIO::simpanJadwal(const vector<Jadwal>& jadwalList, const string& path) {
+void FileIO::simpanJadwal(const vector<Jadwalsss>& jadwalList, const string& path) {
     ofstream out(path);
     for (const auto& j : jadwalList) {
         out << j.kode << "," << j.stasiunAsal << "," << j.stasiunTujuan << ","
@@ -13,9 +13,9 @@ void FileIO::simpanJadwal(const vector<Jadwal>& jadwalList, const string& path) 
     }
 }
 
-void FileIO::muatJadwal(vector<Jadwal>& jadwalList, const string& path) {
+void FileIO::muatJadwal(vector<Jadwalsss>& jadwalList, const string& path) {
     ifstream in(path);
-    Jadwal j;
+    Jadwalsss j;
     while (in >> j.kode >> j.stasiunAsal >> j.stasiunTujuan
               >> j.namaKereta >> j.tanggal >> j.waktuBerangkat >> j.waktuTiba) {
         jadwalList.push_back(j);

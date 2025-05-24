@@ -1,5 +1,4 @@
-#ifndef STACK_HPP
-#define STACK_HPP
+#pragma once
 
 #include <stdexcept>
 
@@ -23,5 +22,3 @@ public:
     bool isEmpty() const;
     size_t size() const;
 };
-
-#endif

@@ -7,28 +7,30 @@
 #include <vector>
 #include <iostream>
 
+using namespace std;
+
 class JadwalManager {
 private:
-    Stack<Jadwal> konfirmasiJadwal;  // Stack untuk menyimpan jadwal yang dihapus
-    std::vector<Jadwal> daftarJadwal;
+    Stack<Jadwalsss> konfirmasiJadwal;  // Stack untuk menyimpan jadwal yang dihapus
+    vector<Jadwalsss> daftarJadwal;
 
 public:
-    bool isValidTanggal(const std::string& tanggal);
-    bool isValidWaktu(const std::string& waktu);
-    std::string generateKodeJadwal(
-        const std::string& namaKereta,
-        const std::string& stasiunAsal,
-        const std::string& stasiunTujuan,
-        const std::string& tanggal
+    bool isValidTanggal(const string& tanggal);
+    bool isValidWaktu(const string& waktu);
+    string generateKodeJadwal(
+        const string& namaKereta,
+        const string& stasiunAsal,
+        const string& stasiunTujuan,
+        const string& tanggal
     );
-    void tambahJadwal(const Jadwal& jadwal);
-    void tampilkanJadwal(const std::string& filterTanggal = "") const;
+    void tambahJadwal(const Jadwalsss& jadwal);
+    void tampilkanJadwal(const string& filterTanggal = "") const;
     void sortSchedules();
     void prosesKonfirmasiJadwal();
 
     // Getter untuk akses baca saja (const)
-    const std::vector<Jadwal>& getJadwal() const;
+    const vector<Jadwalsss>& getJadwal() const;
 
     // Getter untuk akses modifikasi (non-const)
-    std::vector<Jadwal>& getDaftarJadwal();
+    vector<Jadwalsss>& getDaftarJadwal();
 };

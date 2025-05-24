@@ -1,5 +1,4 @@
-#ifndef QUEUE_HPP
-#define QUEUE_HPP
+#pragma once
 
 #include <cstddef>
 #include <stdexcept>
@@ -25,5 +24,3 @@ public:
     bool isEmpty() const;
     size_t size() const;
 };
-
-#endif

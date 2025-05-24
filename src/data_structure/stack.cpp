@@ -45,4 +45,4 @@ size_t Stack<T>::size() const {
 template class Stack<std::string>;
 template class Stack<int>;
 template class Stack<Pemesanan>;
-template class Stack<Jadwal>;
+template class Stack<Jadwalsss>;

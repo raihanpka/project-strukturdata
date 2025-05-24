@@ -61,7 +61,7 @@ string JadwalManager::generateKodeJadwal(const string& namaKereta, const string&
     return kode + "L" + to_string(locomotiveNum);
 }
 
-void JadwalManager::tambahJadwal(const Jadwal& jadwal) {
+void JadwalManager::tambahJadwal(const Jadwalsss& jadwal) {
     if (jadwal.stasiunAsal.empty() || jadwal.stasiunTujuan.empty() ||
         jadwal.namaKereta.empty() || jadwal.tanggal.empty() ||
         jadwal.waktuBerangkat.empty() || jadwal.waktuTiba.empty()) {
@@ -72,7 +72,7 @@ void JadwalManager::tambahJadwal(const Jadwal& jadwal) {
 }
 
 void JadwalManager::tampilkanJadwal(const string& filterTanggal) const {
-    vector<Jadwal> filtered;
+    vector<Jadwalsss> filtered;
     for (const auto& j : daftarJadwal) {
         if (filterTanggal.empty() || j.tanggal == filterTanggal)
             filtered.push_back(j);
@@ -128,7 +128,7 @@ void JadwalManager::tampilkanJadwal(const string& filterTanggal) const {
 
 void JadwalManager::sortSchedules() {
     sort(daftarJadwal.begin(), daftarJadwal.end(),
-        [](const Jadwal& a, const Jadwal& b) {
+        [](const Jadwalsss& a, const Jadwalsss& b) {
             if (a.tanggal != b.tanggal) return a.tanggal < b.tanggal;
             return a.waktuBerangkat < b.waktuBerangkat;
         });
@@ -136,7 +136,7 @@ void JadwalManager::sortSchedules() {
 
 void JadwalManager::prosesKonfirmasiJadwal() {
     while(!konfirmasiJadwal.isEmpty()) {
-        Jadwal j = konfirmasiJadwal.peek();
+        Jadwalsss j = konfirmasiJadwal.peek();
         cout << "\nKonfirmasi Jadwal:\n"
              << "Kode         : " << j.kode << "\n"
              << "Stasiun Asal : " << j.stasiunAsal << "\n"
@@ -160,11 +160,11 @@ void JadwalManager::prosesKonfirmasiJadwal() {
     }
 }
 
-const vector<Jadwal>& JadwalManager::getJadwal() const {
+const vector<Jadwalsss>& JadwalManager::getJadwal() const {
     return daftarJadwal;
 }
 
 // Tambahkan akses non-const ke daftarJadwal
-vector<Jadwal>& JadwalManager::getDaftarJadwal() {
+vector<Jadwalsss>& JadwalManager::getDaftarJadwal() {
     return daftarJadwal;
 }

@@ -6,8 +6,8 @@
 
 class FileIO {
 public:
-    static void simpanJadwal(const std::vector<Jadwal>& jadwalList, const std::string& path);
-    static void muatJadwal(std::vector<Jadwal>& jadwalList, const std::string& path);
+    static void simpanJadwal(const std::vector<Jadwalsss>& jadwalList, const std::string& path);
+    static void muatJadwal(std::vector<Jadwalsss>& jadwalList, const std::string& path);
 
     static void simpanTiket(const std::vector<Pemesanan>& tiketList, const std::string& path);
     static void muatTiket(std::vector<Pemesanan>& daftarPemesanan,

@@ -41,7 +41,7 @@ void menuAdmin(ManagementSystem& sys) {
         
         switch(choice) {
             case 1: {
-                Jadwal j;
+                Jadwalsss j;
                 cout << "Stasiun Asal: ";
                 cin.ignore();
                 getline(cin, j.stasiunAsal);
