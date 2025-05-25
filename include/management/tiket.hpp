@@ -12,6 +12,7 @@
 class TiketManager {
 private:
     Stack<Pemesanan> konfirmasiPemesanan;
+    Queue<Pemesanan> antrianPemesanan;
     std::vector<Pemesanan> daftarPemesanan;
     std::unordered_map<std::string, std::unordered_set<std::string>> kursiTerpesan;
 

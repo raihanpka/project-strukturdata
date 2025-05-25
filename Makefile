@@ -1,30 +1,40 @@
+# Portable Makefile for SISTEMKAI (Windows & Unix)
 CXX = g++
 CXXFLAGS = -std=c++17 -Iinclude -Iinclude/management -Iinclude/users -Iinclude/data_structure
 SRC = $(wildcard src/**/*.cpp) $(wildcard src/*.cpp)
-
 OBJ = $(patsubst src/%,build/%,$(SRC:.cpp=.o))
 TARGET = SISTEMKAI
 
-# Detect OS
-UNAME_S := $(shell uname -s)
+# OS detection
+ifeq ($(OS),Windows_NT)
+	RM = del /s /q
+	RM_DIR = if exist build rmdir /s /q build
+	MKDIR = if not exist $(1) mkdir $(1)
+	SEP = \
+	EXE = .exe
+else
+	RM = rm -rf
+	RM_DIR = rm -rf build
+	MKDIR = mkdir -p $(1)
+	SEP = /
+	EXE =
+endif
 
 all: | build $(TARGET)
 
 $(TARGET): $(OBJ)
-	$(CXX) $(CXXFLAGS) $(OBJ) -o $(TARGET)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(TARGET)$(EXE)
 
 build/%.o: src/%.cpp
-	@mkdir -p $(dir $@)
+	@$(call MKDIR,$(dir $@))
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 build:
-	@mkdir -p build
+	@$(call MKDIR,build)
 
 clean:
-ifeq ($(UNAME_S),Linux)
-	rm -rf build $(TARGET)
-else ifeq ($(UNAME_S),Darwin)
-	rm -rf build $(TARGET)
-else
-	del /Q build $(TARGET) 2>nul || rmdir /S /Q build
-endif
+	$(RM) build$(SEP)*.o
+	$(RM) $(TARGET)$(EXE)
+	$(RM_DIR)
+
+.PHONY: all clean

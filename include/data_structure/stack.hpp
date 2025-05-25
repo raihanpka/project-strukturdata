@@ -12,7 +12,7 @@ private:
         Node(T val) : data(val), next(nullptr) {}
     };
     Node* top;
-    size_t count;  // Added to track size
+    size_t count;
     
 public:
     Stack() : top(nullptr), count(0) {}

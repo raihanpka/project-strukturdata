@@ -6,6 +6,8 @@ using namespace std;
 
 void FileIO::simpanJadwal(const vector<Jadwal>& jadwalList, const string& path) {
     ofstream out(path);
+    // Tulis judul kolom pada baris pertama
+    out << "kode,stasiunAsal,stasiunTujuan,namaKereta,tanggal,waktuBerangkat,waktuTiba\n";
     for (const auto& j : jadwalList) {
         out << j.kode << "," << j.stasiunAsal << "," << j.stasiunTujuan << ","
             << j.namaKereta << "," << j.tanggal << ","
@@ -15,15 +17,25 @@ void FileIO::simpanJadwal(const vector<Jadwal>& jadwalList, const string& path) 
 
 void FileIO::muatJadwal(vector<Jadwal>& jadwalList, const string& path) {
     ifstream in(path);
-    Jadwal j;
-    while (in >> j.kode >> j.stasiunAsal >> j.stasiunTujuan
-              >> j.namaKereta >> j.tanggal >> j.waktuBerangkat >> j.waktuTiba) {
+    string line;
+    getline(in, line); // Skip judul kolom
+    while (getline(in, line)) {
+        stringstream ss(line);
+        Jadwal j;
+        getline(ss, j.kode, ',');
+        getline(ss, j.stasiunAsal, ',');
+        getline(ss, j.stasiunTujuan, ',');
+        getline(ss, j.namaKereta, ',');
+        getline(ss, j.tanggal, ',');
+        getline(ss, j.waktuBerangkat, ',');
+        getline(ss, j.waktuTiba, ',');
         jadwalList.push_back(j);
     }
 }
 
 void FileIO::simpanTiket(const vector<Pemesanan>& tiketList, const string& path) {
     ofstream out(path);
+    out << "pnr,namaPenumpang,nomorKursi,kodeKereta,confirmed\n";
     for (const auto& t : tiketList) {
         out << t.pnr << "," << t.namaPenumpang << "," << t.nomorKursi << ","
             << t.kodeKereta << "," << t.confirmed << "\n";
@@ -34,8 +46,18 @@ void FileIO::muatTiket(vector<Pemesanan>& tiketList,
                        unordered_map<string, unordered_set<string>>& kursiMap,
                        const string& path) {
     ifstream in(path);
-    Pemesanan p;
-    while (in >> p.pnr >> p.namaPenumpang >> p.nomorKursi >> p.kodeKereta >> p.confirmed) {
+    string line;
+    getline(in, line); // Skip header
+    while (getline(in, line)) {
+        stringstream ss(line);
+        Pemesanan p;
+        string confirmedStr;
+        getline(ss, p.pnr, ',');
+        getline(ss, p.namaPenumpang, ',');
+        getline(ss, p.nomorKursi, ',');
+        getline(ss, p.kodeKereta, ',');
+        getline(ss, confirmedStr, ',');
+        p.confirmed = (confirmedStr == "1" || confirmedStr == "true");
         if (p.confirmed) {
             tiketList.push_back(p);
             kursiMap[p.kodeKereta].insert(p.nomorKursi);

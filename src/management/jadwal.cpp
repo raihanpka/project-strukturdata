@@ -1,4 +1,5 @@
 #include "jadwal.hpp"
+#include "sorting.hpp"
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
@@ -126,12 +127,29 @@ void JadwalManager::tampilkanJadwal(const string& filterTanggal) const {
     cin.get();
 }
 
+std::string toSortableDate(const std::string& tanggal) {
+    if (tanggal.size() != 10) return tanggal;
+    return tanggal.substr(6,4) + tanggal.substr(3,2) + tanggal.substr(0,2);
+}
+
+std::string toSortableTime(const std::string& waktu) {
+    if (waktu.size() != 5) return waktu;
+    return waktu.substr(0,2) + waktu.substr(3,2);
+}
+
+struct CompareJadwal {
+    bool operator()(const Jadwal& a, const Jadwal& b) const {
+        std::string tglA = toSortableDate(a.tanggal);
+        std::string tglB = toSortableDate(b.tanggal);
+        if (tglA != tglB) return tglA < tglB;
+        return toSortableTime(a.waktuBerangkat) < toSortableTime(b.waktuBerangkat);
+    }
+};
+
 void JadwalManager::sortSchedules() {
-    sort(daftarJadwal.begin(), daftarJadwal.end(),
-        [](const Jadwal& a, const Jadwal& b) {
-            if (a.tanggal != b.tanggal) return a.tanggal < b.tanggal;
-            return a.waktuBerangkat < b.waktuBerangkat;
-        });
+    if (!daftarJadwal.empty()) {
+        quicksort<Jadwal>(daftarJadwal, 0, static_cast<int>(daftarJadwal.size()) - 1, CompareJadwal());
+    }
 }
 
 void JadwalManager::prosesKonfirmasiJadwal() {

@@ -14,7 +14,7 @@ private:
     };
     Node* front;
     Node* rear;
-    size_t count;  // Added to track size
+    size_t count;
     
 public:
     Queue();
