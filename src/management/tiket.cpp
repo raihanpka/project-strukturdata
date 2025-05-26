@@ -1,4 +1,5 @@
 #include "tiket.hpp"
+#include "jadwal.hpp"
 #include <cstdlib>
 #include <algorithm>
 #include <cctype>
@@ -20,6 +21,23 @@ bool TiketManager::isSeatAvailable(const string& kodeKereta, const string& seat)
     return it->second.find(seat) == it->second.end();
 }
 
+extern vector<Jadwal> daftarJadwal;
+void TiketManager::tampilkanJadwalByKodeKereta(const string& kodeKereta) const {
+    auto it = find_if(daftarJadwal.begin(), daftarJadwal.end(), [&](const Jadwal& j) {
+        return j.kode == kodeKereta;
+    });
+
+    if (it != daftarJadwal.end()) {
+        cout << "\nJadwal Kereta:\n"
+             << "Nama Kereta     : " << it->namaKereta << "\n"
+             << "Stasiun Asal    : " << it->stasiunAsal << "\n"
+             << "Stasiun Tujuan  : " << it->stasiunTujuan << "\n"
+             << "Waktu Berangkat : " << it->waktuBerangkat << "\n"
+             << "Waktu Tiba      : " << it->waktuTiba << "\n";
+    } else {
+        cout << "Jadwal dengan kode kereta " << kodeKereta << " tidak ditemukan.\n";
+    }
+}
 
 void TiketManager::tambahKeAntrian(const Pemesanan& pemesanan) {
     antrianPemesanan.enqueue(pemesanan);
@@ -46,8 +64,9 @@ void TiketManager::prosesKonfirmasiPemesanan() {
              << "PNR         : " << p.pnr << "\n"
              << "Nama        : " << p.namaPenumpang << "\n"
              << "Kursi       : " << p.nomorKursi << "\n"
-             << "Kode Kereta : " << p.kodeKereta << "\n"
-             << "Konfirmasi (Y/N)? ";
+             << "Kode Kereta : " << p.kodeKereta << "\n";
+            tampilkanJadwalByKodeKereta(p.kodeKereta);
+        cout << "\nKonfirmasi (Y/N)? ";
         char input;
         cin >> input;
         input = toupper(input);
@@ -73,6 +92,7 @@ void TiketManager::tampilkanTiketByPNR(const string& pnr) const {
              << "Nama        : " << it->namaPenumpang << "\n"
              << "Kursi       : " << it->nomorKursi << "\n"
              << "Kode Kereta : " << it->kodeKereta << "\n";
+        tampilkanJadwalByKodeKereta(it->kodeKereta);
     } else {
         cout << "Tiket dengan PNR " << pnr << " tidak ditemukan.\n";
     }

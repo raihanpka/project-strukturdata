@@ -29,8 +29,8 @@ void menuUser(ManagementSystem& sys) {
 
         // Validasi apakah input adalah angka
         if (cin.fail()) {
-            cin.clear(); // Clear the error flag
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the invalid input
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Input tidak valid. Silakan masukkan angka.\n";
             cout << "Tekan ENTER untuk melanjutkan...";
             cin.get();
@@ -41,7 +41,6 @@ void menuUser(ManagementSystem& sys) {
             case 1: {
                 string tanggal;
                 cin.ignore();
-                // Validasi tanggal dengan loop agar tidak lempar exception
                 while (true) {
                     cout << "Masukkan Tanggal (DD-MM-YYYY): ";
                     getline(cin, tanggal);
@@ -68,10 +67,14 @@ void menuUser(ManagementSystem& sys) {
                 sys.getTiketManager().tampilkanTiketByPNR(pnr);
                 break;
             }
+            case 3: {
+                cout << "Kembali ke menu utama...\n";
+                return;
+            }
             default: {
                 cout << "Pilihan tidak valid!\n";
-                break;
+                return;
             }
         }
-    } while(choice != 3);
+    } while(true);
 }

@@ -7,10 +7,11 @@
 #include <vector>
 #include <iostream>
 
+extern std::vector<Jadwal> daftarJadwal;
+
 class JadwalManager {
 private:
     Stack<Jadwal> konfirmasiJadwal;  // Stack untuk menyimpan jadwal yang dihapus
-    std::vector<Jadwal> daftarJadwal;
 
 public:
     bool isValidTanggal(const std::string& tanggal);

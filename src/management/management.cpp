@@ -6,14 +6,14 @@
 
 void ManagementSystem::muatDariFile() {
     // Menggunakan getter non-const untuk mengakses data
-    FileIO::muatJadwal(jadwalManager.getDaftarJadwal(), "data/jadwal.txt");
-    FileIO::muatTiket(tiketManager.getMutableDaftarPemesanan(), tiketManager.getMutableKursiTerpesan(), "data/pemesanan.txt");
+    FileIO::muatJadwal(jadwalManager.getDaftarJadwal(), "data/jadwal.csv");
+    FileIO::muatTiket(tiketManager.getMutableDaftarPemesanan(), tiketManager.getMutableKursiTerpesan(), "data/pemesanan.csv");
 }
 
 void ManagementSystem::simpanKeFile() const {
     // Menggunakan getter const karena kita hanya membaca data
-    FileIO::simpanJadwal(jadwalManager.getJadwal(), "data/jadwal.txt");
-    FileIO::simpanTiket(tiketManager.getDaftarPemesanan(), "data/pemesanan.txt");
+    FileIO::simpanJadwal(jadwalManager.getJadwal(), "data/jadwal.csv");
+    FileIO::simpanTiket(tiketManager.getDaftarPemesanan(), "data/pemesanan.csv");
 }
 
 UserContext& ManagementSystem::getUser() { 

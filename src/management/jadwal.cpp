@@ -8,6 +8,8 @@
 
 using namespace std;
 
+vector<Jadwal> daftarJadwal;
+
 bool JadwalManager::isValidTanggal(const string& tanggal) {
     tm tm = {};
     istringstream ss(tanggal);
@@ -163,7 +165,7 @@ void JadwalManager::prosesKonfirmasiJadwal() {
              << "Tanggal      : " << j.tanggal << "\n"
              << "Waktu Berangkat: " << j.waktuBerangkat << "\n"
              << "Waktu Tiba   : " << j.waktuTiba << "\n"
-             << "Konfirmasi (Y/N)? ";
+             << "\nKonfirmasi (Y/N)? ";
         char input;
         cin >> input;
         input = toupper(input);

@@ -57,10 +57,11 @@ int main() {
             }
             case 3: {
                 cout << "Keluar dari program...\n";
-                break;
+                cout << BLUE << "\nTerima kasih telah menggunakan SISTEMKAI!\nSampai Jumpa!\n" << WHITE << endl;
+                return 0;
             }
         }
-    } while (pilihan != 3);
+    } while (true);
 
     system.simpanKeFile();
     return 0;

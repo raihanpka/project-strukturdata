@@ -86,6 +86,7 @@ void menuAdmin(ManagementSystem& sys) {
                 }
                 cout << "Tekan ENTER untuk melanjutkan...";
                 cin.get();
+                sys.simpanKeFile();
                 break;
             }
             case 2: {
@@ -105,9 +106,7 @@ void menuAdmin(ManagementSystem& sys) {
                     break;
                 }
                 // Memproses pemesanan tiket
-                cout << "Memproses pemesanan tiket...\n";
-                cout << "Tekan ENTER untuk melanjutkan...";
-                cin.get();
+                cout << "\nMemproses pemesanan tiket...\n";
                 try {
                     sys.getTiketManager().tambahKeAntrian(p);
                     sys.getTiketManager().prosesAntrianPesanan();
@@ -115,6 +114,7 @@ void menuAdmin(ManagementSystem& sys) {
                 } catch(const exception& e) {
                     cout << "Error: " << e.what() << "\n";
                 }
+                sys.simpanKeFile();
                 break;
             }
             case 3: {
