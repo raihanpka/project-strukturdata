@@ -20,13 +20,25 @@ bool TiketManager::isSeatAvailable(const string& kodeKereta, const string& seat)
     return it->second.find(seat) == it->second.end();
 }
 
-void TiketManager::pesanTiket(const Pemesanan& pemesanan) {
-    if (!isSeatAvailable(pemesanan.kodeKereta, pemesanan.nomorKursi)) {
-        throw runtime_error("Kursi sudah dipesan!");
-    }
-    konfirmasiPemesanan.push(pemesanan);
+
+void TiketManager::tambahKeAntrian(const Pemesanan& pemesanan) {
+    antrianPemesanan.enqueue(pemesanan);
 }
 
+// Memproses antrian pemesanan tiket menggunakan queue
+void TiketManager::prosesAntrianPesanan() {
+    while (!antrianPemesanan.isEmpty()) {
+        Pemesanan p = antrianPemesanan.peek();
+        if (isSeatAvailable(p.kodeKereta, p.nomorKursi)) {
+            konfirmasiPemesanan.push(p);
+        } else {
+            cout << "Kursi " << p.nomorKursi << " pada kereta " << p.kodeKereta << " sudah dipesan.\n";
+        }
+        antrianPemesanan.dequeue();
+    }
+}
+
+// Menggunakan stack untuk konfirmasi pemesanan
 void TiketManager::prosesKonfirmasiPemesanan() {
     while (!konfirmasiPemesanan.isEmpty()) {
         Pemesanan p = konfirmasiPemesanan.peek();

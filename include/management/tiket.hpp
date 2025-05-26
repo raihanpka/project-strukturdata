@@ -20,7 +20,8 @@ public:
     std::string generatePNR() const;
     bool isSeatAvailable(const std::string& kodeKereta, const std::string& seat) const;
 
-    void pesanTiket(const Pemesanan& pemesanan);
+    void tambahKeAntrian(const Pemesanan& pemesanan);
+    void prosesAntrianPesanan();
     void prosesKonfirmasiPemesanan();
 
     void tampilkanTiketByPNR(const std::string& pnr) const;

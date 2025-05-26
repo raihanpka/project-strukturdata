@@ -22,7 +22,7 @@ bool JadwalManager::isValidWaktu(const string& waktu) {
     return !ss.fail();
 }
 
-string JadwalManager::generateKodeJadwal(const string& namaKereta, const string& stasiunAsal,
+string JadwalManager::hashingKodeJadwal(const string& namaKereta, const string& stasiunAsal,
                                          const string& stasiunTujuan, const string& tanggal) 
 {
     string kode = "KA-";

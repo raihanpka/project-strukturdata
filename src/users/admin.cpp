@@ -74,7 +74,7 @@ void menuAdmin(ManagementSystem& sys) {
                     }
                 }
                 // Menggenerate kode jadwal
-                j.kode = sys.getJadwalManager().generateKodeJadwal(j.namaKereta, j.stasiunAsal, j.stasiunTujuan, j.tanggal);
+                j.kode = sys.getJadwalManager().hashingKodeJadwal(j.namaKereta, j.stasiunAsal, j.stasiunTujuan, j.tanggal);
                 cout << "\nKode Kereta yang digenerate: " << j.kode << "\n";
                 // Memproses pemesanan tiket
                 cout << "\nMemproses pemesanan tiket...\n";
@@ -109,7 +109,8 @@ void menuAdmin(ManagementSystem& sys) {
                 cout << "Tekan ENTER untuk melanjutkan...";
                 cin.get();
                 try {
-                    sys.getTiketManager().pesanTiket(p);
+                    sys.getTiketManager().tambahKeAntrian(p);
+                    sys.getTiketManager().prosesAntrianPesanan();
                     sys.getTiketManager().prosesKonfirmasiPemesanan();
                 } catch(const exception& e) {
                     cout << "Error: " << e.what() << "\n";

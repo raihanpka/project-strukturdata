@@ -15,7 +15,7 @@ private:
 public:
     bool isValidTanggal(const std::string& tanggal);
     bool isValidWaktu(const std::string& waktu);
-    std::string generateKodeJadwal(
+    std::string hashingKodeJadwal(
         const std::string& namaKereta,
         const std::string& stasiunAsal,
         const std::string& stasiunTujuan,

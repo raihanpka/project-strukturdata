@@ -18,7 +18,7 @@ void FileIO::simpanJadwal(const vector<Jadwal>& jadwalList, const string& path) 
 void FileIO::muatJadwal(vector<Jadwal>& jadwalList, const string& path) {
     ifstream in(path);
     string line;
-    getline(in, line); // Skip judul kolom
+    getline(in, line);
     while (getline(in, line)) {
         stringstream ss(line);
         Jadwal j;
@@ -47,7 +47,7 @@ void FileIO::muatTiket(vector<Pemesanan>& tiketList,
                        const string& path) {
     ifstream in(path);
     string line;
-    getline(in, line); // Skip header
+    getline(in, line);
     while (getline(in, line)) {
         stringstream ss(line);
         Pemesanan p;
