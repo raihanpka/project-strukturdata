@@ -148,29 +148,18 @@ void menuAdmin(ManagementSystem& sys) {
                 break;
             }
             case 2: {
-                Pemesanan p;
-                cout << "Nama Penumpang: ";
-                cin.ignore();
-                getline(cin, p.namaPenumpang);
-                cout << "Nomor Kursi: ";
-                getline(cin, p.nomorKursi);
-                cout << "Kode Kereta: ";
-                getline(cin, p.kodeJadwal);
-                p.pnr = sys.getTiketManager().generatePNR();
-                cout << "PNR yang digenerate: " << p.pnr << "\n";
-                // Memvalidasi ketersediaan kursi
-                if (!sys.getTiketManager().isSeatAvailable(p.kodeJadwal, p.nomorKursi)) {
-                    cout << "Kursi tidak tersedia!\n";
-                    break;
-                }
-                // Memproses pemesanan tiket
-                cout << "\nMemproses pemesanan tiket...\n";
-                try {
-                    sys.getTiketManager().tambahKeAntrian(p);
+                cout << "\nKelola Tiket Penumpang:\n";
+                cout << "1. Proses pemesanan tiket penumpang\n";
+                cout << "2. Cek antrian pemesanan\n";
+                cout << "Pilih: ";
+                int prosesPilihan;
+                cin >> prosesPilihan;
+                if (prosesPilihan == 1) {
                     sys.getTiketManager().prosesAntrianPesanan();
-                    sys.getTiketManager().prosesKonfirmasiPemesanan();
-                } catch(const exception& e) {
-                    cout << "Error: " << e.what() << "\n";
+                } else if (prosesPilihan == 2) {
+                    sys.getTiketManager().cekAntrianPesanan();
+                } else {
+                    cout << "Pilihan tidak valid!\n";
                 }
                 sys.simpanKeFile();
                 break;

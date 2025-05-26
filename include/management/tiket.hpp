@@ -20,11 +20,16 @@ private:
 public:
     std::string generatePNR() const;
     bool isSeatAvailable(const std::string& kodeJadwal, const std::string& seat) const;
-
-    void tampilkanJadwalBykodeJadwal(const std::string& kodeJadwal) const;
-    void tambahKeAntrian(const Pemesanan& pemesanan);
+    std::string cariJadwalByPesanan(
+        const std::string& asal,
+        const std::string& tujuan,
+        const std::string& kereta,
+        const std::string& tanggal
+    ) const;
+    void tampilkanJadwalByKode(const std::string& kodeJadwal) const;
+    void cekAntrianPesanan() const;
     void prosesAntrianPesanan();
-    void prosesKonfirmasiPemesanan();
+    void tambahKeAntrian(const Pemesanan& pemesanan);
     void tampilkanTiketByPNR(const std::string& pnr) const;
 
     // Getters untuk akses baca saja (const)

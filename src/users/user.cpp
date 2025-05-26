@@ -23,6 +23,7 @@ void menuUser(ManagementSystem& sys) {
                 << "\nMenu Penumpang:\n"
                 << "1. Lihat Jadwal Kereta\n"
                 << "2. Cari Tiket Penumpang\n"
+                << "3. Pesan Tiket\n"
                 << "3. Kembali\n"
                 << "Pilih: ";
         cin >> choice;
@@ -68,6 +69,88 @@ void menuUser(ManagementSystem& sys) {
                 break;
             }
             case 3: {
+                Stack<Pemesanan> undoStack;
+                Pemesanan p;
+                bool selesaiInput = false;
+
+                auto inputField = [](const string& prompt, string& field) {
+                    cout << prompt;
+                    getline(cin, field);
+                    if (field == "0") return -1;
+                    if (field == "1") return 1;
+                    return 0;
+                };
+
+                while (!selesaiInput) {
+                    p = Pemesanan(); // Reset data
+                    string stasiunAsal, stasiunTujuan, kereta, tanggal;
+                    while (true) {
+                        int res;
+                        cin.ignore();
+                        res = inputField("Nama Penumpang: ", p.namaPenumpang);
+                        if (res == -1) { cout << "Tidak ada data untuk undo.\n"; continue; }
+                        if (res == 1) break;
+
+                        res = inputField("Nomor Kursi: ", p.nomorKursi);
+                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
+                        if (res == 1) break;
+
+                        res = inputField("Stasiun Asal: ", stasiunAsal);
+                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
+                        if (res == 1) break;
+
+                        res = inputField("Stasiun Tujuan: ", stasiunTujuan);
+                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
+                        if (res == 1) break;
+
+                        res = inputField("Nama Kereta: ", kereta);
+                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
+                        if (res == 1) break;
+
+                        res = inputField("Tanggal Keberangkatan (DD-MM-YYYY): ", tanggal);
+                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
+                        if (res == 1) break;
+
+                        break;
+                    }
+
+                    p.kodeJadwal = sys.getTiketManager().cariJadwalByPesanan(stasiunAsal, stasiunTujuan, kereta, tanggal);
+                    if (p.kodeJadwal.empty()) {
+                        cout << "Tidak ada jadwal yang ditemukan untuk input tersebut.\n";
+                        continue;
+                    }
+
+                    sys.getTiketManager().tampilkanJadwalByKode(p.kodeJadwal);
+                    p.pnr = sys.getTiketManager().generatePNR();
+                    cout << "PNR yang digenerate: " << p.pnr << "\n";
+
+                    // Simpan ke stack undo
+                    undoStack.push(p);
+
+                    cout << "\nKetik 0 untuk membatalkan atau undo, atau 1 untuk lanjut ke antrian.\n";
+                    cout << "Lanjutkan input? (tekan ENTER untuk lanjut, atau ketik 0 untuk undo): ";
+                    string aksi;
+                    getline(cin, aksi);
+                    if (aksi == "0" && !undoStack.isEmpty()) {
+                        undoStack.pop();
+                        cout << "Input terakhir dibatalkan. Silakan ENTER untuk input ulang!\n";
+                        continue;
+                    } else {
+                        selesaiInput = true;
+                        // Hanya masukkan ke antrian di sini!
+                        Pemesanan pesananFinal = undoStack.peek();
+                        if (!sys.getTiketManager().isSeatAvailable(pesananFinal.kodeJadwal, pesananFinal.nomorKursi)) {
+                            cout << "Kursi tidak tersedia!\n";
+                        } else {
+                            sys.getTiketManager().tambahKeAntrian(pesananFinal);
+                            cout << "\nPesanan telah masuk ke antrian.\n";
+                        }
+                        cout << "Tekan ENTER untuk melanjutkan...\n";
+                        cin.get();
+                    }
+                }
+            }
+            case 4: {
                 cout << "Kembali ke menu utama...\n";
                 return;
             }

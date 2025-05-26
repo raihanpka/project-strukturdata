@@ -1,8 +1,10 @@
 #include "tiket.hpp"
 #include "jadwal.hpp"
+#include "file_io.hpp"
 #include <cstdlib>
 #include <algorithm>
 #include <cctype>
+#include <iomanip>
 
 using namespace std;
 
@@ -22,7 +24,23 @@ bool TiketManager::isSeatAvailable(const string& kodeJadwal, const string& seat)
 }
 
 extern vector<Jadwal> daftarJadwal;
-void TiketManager::tampilkanJadwalBykodeJadwal(const string& kodeJadwal) const {
+string TiketManager::cariJadwalByPesanan(
+    const string& asal, const string& tujuan, const string& kereta, const string& tanggal) const
+{
+    auto it = find_if(daftarJadwal.begin(), daftarJadwal.end(), [&](const Jadwal& j) {
+        return j.stasiunAsal == asal &&
+               j.stasiunTujuan == tujuan &&
+               j.namaKereta == kereta &&
+               j.tanggal == tanggal;
+    });
+    if (it != daftarJadwal.end()) {
+        return it->kode;
+    }
+    return "";
+}
+
+extern vector<Jadwal> daftarJadwal;
+void TiketManager::tampilkanJadwalByKode(const string& kodeJadwal) const {
     auto it = find_if(daftarJadwal.begin(), daftarJadwal.end(), [&](const Jadwal& j) {
         return j.kode == kodeJadwal;
     });
@@ -43,7 +61,7 @@ void TiketManager::tambahKeAntrian(const Pemesanan& pemesanan) {
     antrianPemesanan.enqueue(pemesanan);
 }
 
-// Memproses antrian pemesanan tiket menggunakan queue
+// Memproses antrian semua pemesanan tiket menggunakan queue
 void TiketManager::prosesAntrianPesanan() {
     while (!antrianPemesanan.isEmpty()) {
         Pemesanan p = antrianPemesanan.peek();
@@ -56,28 +74,45 @@ void TiketManager::prosesAntrianPesanan() {
     }
 }
 
-// Menggunakan stack untuk konfirmasi pemesanan
-void TiketManager::prosesKonfirmasiPemesanan() {
-    while (!konfirmasiPemesanan.isEmpty()) {
-        Pemesanan p = konfirmasiPemesanan.peek();
-        cout << "\nKonfirmasi Pemesanan:\n"
-             << "PNR         : " << p.pnr << "\n"
-             << "Nama        : " << p.namaPenumpang << "\n"
-             << "Kursi       : " << p.nomorKursi << "\n"
-             << "Kode Kereta : " << p.kodeJadwal << "\n";
-            tampilkanJadwalBykodeJadwal(p.kodeJadwal);
-        cout << "\nKonfirmasi (Y/N)? ";
-        char input;
-        cin >> input;
-        input = toupper(input);
+extern vector<Jadwal> daftarJadwal;
+void TiketManager::cekAntrianPesanan() const {
+    if (antrianPemesanan.isEmpty()) {
+        cout << "Antrian pemesanan kosong.\n";
+        cout << "\nTekan ENTER untuk melanjutkan...";
         cin.ignore();
-
-        if (input == 'Y' || input == 'y') {
-            p.confirmed = true;
-            daftarPemesanan.push_back(p);
-            kursiTerpesan[p.kodeJadwal].insert(p.nomorKursi);
+        cin.get();
+    } else {
+        cin.ignore();
+        cout << "\nDaftar Antrian Pemesanan Tiket\n";
+        cout << "+-----+----------------------+----------------------+--------------------------+-------------+-------------+------------+\n"
+             << "| No  | Nama Penumpang       | Kode Jadwal          | Nama Kereta              | Berangkat   | Tiba        | Kursi      |\n"
+             << "+-----+----------------------+----------------------+--------------------------+-------------+-------------+------------+\n";
+        int no = 1;
+        auto tempQueue = antrianPemesanan;
+        while (!tempQueue.isEmpty()) {
+            Pemesanan p = tempQueue.peek();
+            string namaKereta = "-", waktuBerangkat = "-", waktuTiba = "-";
+            // Cari data jadwal yang sesuai kodeJadwal di daftarJadwal
+            for (const auto& j : daftarJadwal) {
+                if (j.kode == p.kodeJadwal) {
+                    namaKereta = j.namaKereta;
+                    waktuBerangkat = j.waktuBerangkat;
+                    waktuTiba = j.waktuTiba;
+                    break;
+                }
+            }
+            cout << "| " << left << setw(3)  << no++ << " "
+                 << "| " << left << setw(21) << p.namaPenumpang
+                 << "| " << left << setw(21) << p.kodeJadwal
+                 << "| " << left << setw(25) << namaKereta
+                 << "| " << left << setw(12) << waktuBerangkat
+                 << "| " << left << setw(12) << waktuTiba
+                 << "| " << left << setw(11) << p.nomorKursi << "|\n";
+            tempQueue.dequeue();
         }
-        konfirmasiPemesanan.pop();
+        cout << "+-----+----------------------+----------------------+--------------------------+-------------+-------------+------------+\n";
+        cout << "\nTekan ENTER untuk melanjutkan...";
+        cin.get();
     }
 }
 
@@ -92,7 +127,7 @@ void TiketManager::tampilkanTiketByPNR(const string& pnr) const {
              << "Nama        : " << it->namaPenumpang << "\n"
              << "Kursi       : " << it->nomorKursi << "\n"
              << "Kode Kereta : " << it->kodeJadwal << "\n";
-        tampilkanJadwalBykodeJadwal(it->kodeJadwal);
+        tampilkanJadwalByKode(it->kodeJadwal);
     } else {
         cout << "Tiket dengan PNR " << pnr << " tidak ditemukan.\n";
     }
