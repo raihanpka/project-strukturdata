@@ -27,7 +27,7 @@ bool JadwalManager::isValidWaktu(const string& waktu) {
 string JadwalManager::hashingKodeJadwal(const string& namaKereta, const string& stasiunAsal,
                                          const string& stasiunTujuan, const string& tanggal) 
 {
-    string kode = "KA-";
+    string kode = "KAI";
     int count = 0;
     for (char c : namaKereta) {
         if (count >= 3) break;
@@ -72,6 +72,28 @@ void JadwalManager::tambahJadwal(const Jadwal& jadwal) {
     }
     daftarJadwal.push_back(jadwal);
     sortSchedules();
+}
+
+void JadwalManager::editJadwal(const string& kodeJadwal, const Jadwal& jadwalBaru) {
+    auto it = find_if(daftarJadwal.begin(), daftarJadwal.end(),
+                      [&kodeJadwal](const Jadwal& j) { return j.kode == kodeJadwal; });
+    if (it != daftarJadwal.end()) {
+        *it = jadwalBaru;
+        sortSchedules();
+    } else {
+        throw runtime_error("Jadwal dengan kode " + kodeJadwal + " tidak ditemukan.");
+    }
+}
+
+void JadwalManager::hapusJadwal(const string& kodeJadwal) {
+    auto it = find_if(daftarJadwal.begin(), daftarJadwal.end(),
+                      [&kodeJadwal](const Jadwal& j) { return j.kode == kodeJadwal; });
+    if (it != daftarJadwal.end()) {
+        konfirmasiJadwal.push(*it);
+        daftarJadwal.erase(it);
+    } else {
+        throw runtime_error("Jadwal dengan kode " + kodeJadwal + " tidak ditemukan.");
+    }
 }
 
 void JadwalManager::tampilkanJadwal(const string& filterTanggal) const {

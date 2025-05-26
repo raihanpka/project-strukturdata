@@ -22,9 +22,9 @@ void menuAdmin(ManagementSystem& sys) {
         cout << BLUE << "\\____/ \\___/\\____/  \\_/ \\____/\\_|  |_/\\_| \\_/\\_| |_/\\___/ " << endl;
         cout << WHITE  
                 << "\nMenu Admin:\n"
-                << "1. Tambah Jadwal Kereta\n"
-                << "2. Pesan Tiket Penumpang\n"
-                << "3. Lihat Semua Jadwal\n"
+                << "1. Kelola Jadwal Kereta\n"
+                << "2. Kelola Tiket Penumpang\n"
+                << "3. Lihat Jadwal Kereta\n"
                 << "4. Kembali\n"
                 << "Pilih: ";
         cin >> choice;
@@ -41,52 +41,110 @@ void menuAdmin(ManagementSystem& sys) {
         
         switch(choice) {
             case 1: {
-                Jadwal j;
-                cout << "Stasiun Asal: ";
-                cin.ignore();
-                getline(cin, j.stasiunAsal);
-                cout << "Stasiun Tujuan: ";
-                getline(cin, j.stasiunTujuan);
-                cout << "Nama Kereta: ";
-                getline(cin, j.namaKereta);
-                // Validasi tanggal dengan loop agar tidak lempar exception
-                while (true) {
-                    cout << "Tanggal (DD-MM-YYYY): ";
-                    getline(cin, j.tanggal);
-                    if (sys.getJadwalManager().isValidTanggal(j.tanggal)) {
+                int subChoice;
+                do {
+                    cout << "\nKelola Jadwal Kereta:\n";
+                    cout << "1. Tambah Jadwal\n";
+                    cout << "2. Edit Jadwal\n";
+                    cout << "3. Hapus Jadwal\n";
+                    cout << "4. Kembali\n";
+                    cout << "Pilih: ";
+                    cin >> subChoice;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Input tidak valid. Silakan masukkan angka.\n";
+                        continue;
+                    }
+                    cin.ignore();
+                    if (subChoice == 1) {
+                        Jadwal j;
+                        cout << "Stasiun Asal: ";
+                        getline(cin, j.stasiunAsal);
+                        cout << "Stasiun Tujuan: ";
+                        getline(cin, j.stasiunTujuan);
+                        cout << "Nama Kereta: ";
+                        getline(cin, j.namaKereta);
+                        while (true) {
+                            cout << "Tanggal (DD-MM-YYYY): ";
+                            getline(cin, j.tanggal);
+                            if (sys.getJadwalManager().isValidTanggal(j.tanggal)) break;
+                            cout << "Format tanggal tidak valid. Harus DD-MM-YYYY.\n";
+                        }
+                        while (true) {
+                            cout << "Waktu Berangkat (JJ:MM): ";
+                            getline(cin, j.waktuBerangkat);
+                            cout << "Waktu Tiba (JJ:MM): ";
+                            getline(cin, j.waktuTiba);
+                            if (sys.getJadwalManager().isValidWaktu(j.waktuBerangkat) && sys.getJadwalManager().isValidWaktu(j.waktuTiba)) break;
+                            cout << "Format waktu tidak valid. Harus JJ:MM.\n";
+                        }
+                        j.kode = sys.getJadwalManager().hashingKodeJadwal(j.namaKereta, j.stasiunAsal, j.stasiunTujuan, j.tanggal);
+                        cout << "\nKode Kereta yang digenerate: " << j.kode << "\n";
+                        try {
+                            sys.getJadwalManager().tambahJadwal(j);
+                            sys.getJadwalManager().prosesKonfirmasiJadwal();
+                        } catch (const exception& e) {
+                            cout << "Terjadi error: " << e.what() << "\n";
+                        }
+                        cout << "Tekan ENTER untuk melanjutkan...";
+                        cin.get();
+                        sys.simpanKeFile();
+                    } else if (subChoice == 2) {
+                        string kode;
+                        cout << "Masukkan kode jadwal yang akan diedit: ";
+                        getline(cin, kode);
+                        Jadwal jBaru;
+                        cout << "Stasiun Asal Baru: ";
+                        getline(cin, jBaru.stasiunAsal);
+                        cout << "Stasiun Tujuan Baru: ";
+                        getline(cin, jBaru.stasiunTujuan);
+                        cout << "Nama Kereta Baru: ";
+                        getline(cin, jBaru.namaKereta);
+                        while (true) {
+                            cout << "Tanggal Baru (DD-MM-YYYY): ";
+                            getline(cin, jBaru.tanggal);
+                            if (sys.getJadwalManager().isValidTanggal(jBaru.tanggal)) break;
+                            cout << "Format tanggal tidak valid. Harus DD-MM-YYYY.\n";
+                        }
+                        while (true) {
+                            cout << "Waktu Berangkat Baru (JJ:MM): ";
+                            getline(cin, jBaru.waktuBerangkat);
+                            cout << "Waktu Tiba Baru (JJ:MM): ";
+                            getline(cin, jBaru.waktuTiba);
+                            if (sys.getJadwalManager().isValidWaktu(jBaru.waktuBerangkat) && sys.getJadwalManager().isValidWaktu(jBaru.waktuTiba)) break;
+                            cout << "Format waktu tidak valid. Harus JJ:MM.\n";
+                        }
+                        // kode diperbarui
+                        jBaru.kode = sys.getJadwalManager().hashingKodeJadwal(jBaru.namaKereta, jBaru.stasiunAsal, jBaru.stasiunTujuan, jBaru.tanggal);
+                        try {
+                            sys.getJadwalManager().editJadwal(kode, jBaru);
+                            cout << "Jadwal berhasil diedit dengan kode jadwal baru: " << jBaru.kode << endl;
+                        } catch (const exception& e) {
+                            cout << "Terjadi error: " << e.what() << "\n";
+                        }
+                        cout << "Tekan ENTER untuk melanjutkan...";
+                        cin.get();
+                        sys.simpanKeFile();
+                    } else if (subChoice == 3) {
+                        string kode;
+                        cout << "Masukkan kode jadwal yang akan dihapus: ";
+                        getline(cin, kode);
+                        try {
+                            sys.getJadwalManager().hapusJadwal(kode);
+                            cout << "Jadwal berhasil dihapus.\n";
+                        } catch (const exception& e) {
+                            cout << "Terjadi error: " << e.what() << "\n";
+                        }
+                        cout << "Tekan ENTER untuk melanjutkan...";
+                        cin.get();
+                        sys.simpanKeFile();
+                    } else if (subChoice == 4) {
                         break;
                     } else {
-                        cout << "Format tanggal tidak valid. Harus DD-MM-YYYY.\n";
+                        cout << "Pilihan tidak valid!\n";
                     }
-                }
-                // Validasi waktu dengan loop agar tidak lempar exception
-                while (true) {
-                    cout << "Waktu Berangkat (JJ:MM): ";
-                    getline(cin, j.waktuBerangkat);
-                    cout << "Waktu Tiba (JJ:MM): ";
-                    getline(cin, j.waktuTiba);
-                    if (sys.getJadwalManager().isValidWaktu(j.waktuBerangkat)) {
-                        break;
-                    } else if (sys.getJadwalManager().isValidWaktu(j.waktuTiba)) {
-                        break;
-                    } else {
-                        cout << "Format waktu tidak valid. Harus JJ:MM.\n";
-                    }
-                }
-                // Menggenerate kode jadwal
-                j.kode = sys.getJadwalManager().hashingKodeJadwal(j.namaKereta, j.stasiunAsal, j.stasiunTujuan, j.tanggal);
-                cout << "\nKode Kereta yang digenerate: " << j.kode << "\n";
-                // Memproses pemesanan tiket
-                cout << "\nMemproses pemesanan tiket...\n";
-                try {
-                    sys.getJadwalManager().tambahJadwal(j);
-                    sys.getJadwalManager().prosesKonfirmasiJadwal();
-                } catch (const exception& e) {
-                    cout << "Terjadi error: " << e.what() << "\n";
-                }
-                cout << "Tekan ENTER untuk melanjutkan...";
-                cin.get();
-                sys.simpanKeFile();
+                } while (subChoice != 4);
                 break;
             }
             case 2: {
@@ -97,11 +155,11 @@ void menuAdmin(ManagementSystem& sys) {
                 cout << "Nomor Kursi: ";
                 getline(cin, p.nomorKursi);
                 cout << "Kode Kereta: ";
-                getline(cin, p.kodeKereta);
+                getline(cin, p.kodeJadwal);
                 p.pnr = sys.getTiketManager().generatePNR();
                 cout << "PNR yang digenerate: " << p.pnr << "\n";
                 // Memvalidasi ketersediaan kursi
-                if (!sys.getTiketManager().isSeatAvailable(p.kodeKereta, p.nomorKursi)) {
+                if (!sys.getTiketManager().isSeatAvailable(p.kodeJadwal, p.nomorKursi)) {
                     cout << "Kursi tidak tersedia!\n";
                     break;
                 }

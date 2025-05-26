@@ -19,9 +19,9 @@ private:
 
 public:
     std::string generatePNR() const;
-    bool isSeatAvailable(const std::string& kodeKereta, const std::string& seat) const;
+    bool isSeatAvailable(const std::string& kodeJadwal, const std::string& seat) const;
 
-    void tampilkanJadwalByKodeKereta(const std::string& kodeKereta) const;
+    void tampilkanJadwalBykodeJadwal(const std::string& kodeJadwal) const;
     void tambahKeAntrian(const Pemesanan& pemesanan);
     void prosesAntrianPesanan();
     void prosesKonfirmasiPemesanan();

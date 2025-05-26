@@ -16,6 +16,6 @@ struct Pemesanan {
     std::string pnr;
     std::string namaPenumpang;
     std::string nomorKursi;
-    std::string kodeKereta;
+    std::string kodeJadwal;
     bool confirmed = false;
 };

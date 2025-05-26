@@ -15,16 +15,16 @@ string TiketManager::generatePNR() const {
     return pnr;
 }
 
-bool TiketManager::isSeatAvailable(const string& kodeKereta, const string& seat) const {
-    auto it = kursiTerpesan.find(kodeKereta);
+bool TiketManager::isSeatAvailable(const string& kodeJadwal, const string& seat) const {
+    auto it = kursiTerpesan.find(kodeJadwal);
     if (it == kursiTerpesan.end()) return true;
     return it->second.find(seat) == it->second.end();
 }
 
 extern vector<Jadwal> daftarJadwal;
-void TiketManager::tampilkanJadwalByKodeKereta(const string& kodeKereta) const {
+void TiketManager::tampilkanJadwalBykodeJadwal(const string& kodeJadwal) const {
     auto it = find_if(daftarJadwal.begin(), daftarJadwal.end(), [&](const Jadwal& j) {
-        return j.kode == kodeKereta;
+        return j.kode == kodeJadwal;
     });
 
     if (it != daftarJadwal.end()) {
@@ -35,7 +35,7 @@ void TiketManager::tampilkanJadwalByKodeKereta(const string& kodeKereta) const {
              << "Waktu Berangkat : " << it->waktuBerangkat << "\n"
              << "Waktu Tiba      : " << it->waktuTiba << "\n";
     } else {
-        cout << "Jadwal dengan kode kereta " << kodeKereta << " tidak ditemukan.\n";
+        cout << "Jadwal dengan kode kereta " << kodeJadwal << " tidak ditemukan.\n";
     }
 }
 
@@ -47,10 +47,10 @@ void TiketManager::tambahKeAntrian(const Pemesanan& pemesanan) {
 void TiketManager::prosesAntrianPesanan() {
     while (!antrianPemesanan.isEmpty()) {
         Pemesanan p = antrianPemesanan.peek();
-        if (isSeatAvailable(p.kodeKereta, p.nomorKursi)) {
+        if (isSeatAvailable(p.kodeJadwal, p.nomorKursi)) {
             konfirmasiPemesanan.push(p);
         } else {
-            cout << "Kursi " << p.nomorKursi << " pada kereta " << p.kodeKereta << " sudah dipesan.\n";
+            cout << "Kursi " << p.nomorKursi << " pada kereta " << p.kodeJadwal << " sudah dipesan.\n";
         }
         antrianPemesanan.dequeue();
     }
@@ -64,8 +64,8 @@ void TiketManager::prosesKonfirmasiPemesanan() {
              << "PNR         : " << p.pnr << "\n"
              << "Nama        : " << p.namaPenumpang << "\n"
              << "Kursi       : " << p.nomorKursi << "\n"
-             << "Kode Kereta : " << p.kodeKereta << "\n";
-            tampilkanJadwalByKodeKereta(p.kodeKereta);
+             << "Kode Kereta : " << p.kodeJadwal << "\n";
+            tampilkanJadwalBykodeJadwal(p.kodeJadwal);
         cout << "\nKonfirmasi (Y/N)? ";
         char input;
         cin >> input;
@@ -75,7 +75,7 @@ void TiketManager::prosesKonfirmasiPemesanan() {
         if (input == 'Y' || input == 'y') {
             p.confirmed = true;
             daftarPemesanan.push_back(p);
-            kursiTerpesan[p.kodeKereta].insert(p.nomorKursi);
+            kursiTerpesan[p.kodeJadwal].insert(p.nomorKursi);
         }
         konfirmasiPemesanan.pop();
     }
@@ -91,8 +91,8 @@ void TiketManager::tampilkanTiketByPNR(const string& pnr) const {
              << "PNR         : " << it->pnr << "\n"
              << "Nama        : " << it->namaPenumpang << "\n"
              << "Kursi       : " << it->nomorKursi << "\n"
-             << "Kode Kereta : " << it->kodeKereta << "\n";
-        tampilkanJadwalByKodeKereta(it->kodeKereta);
+             << "Kode Kereta : " << it->kodeJadwal << "\n";
+        tampilkanJadwalBykodeJadwal(it->kodeJadwal);
     } else {
         cout << "Tiket dengan PNR " << pnr << " tidak ditemukan.\n";
     }

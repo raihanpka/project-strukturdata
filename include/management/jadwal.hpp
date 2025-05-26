@@ -24,6 +24,8 @@ public:
     );
     void tambahJadwal(const Jadwal& jadwal);
     void tampilkanJadwal(const std::string& filterTanggal = "") const;
+    void editJadwal(const std::string& kodeJadwal, const Jadwal& jadwalBaru);
+    void hapusJadwal(const std::string& kodeJadwal);
     void sortSchedules();
     void prosesKonfirmasiJadwal();
 

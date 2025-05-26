@@ -7,7 +7,7 @@ using namespace std;
 void FileIO::simpanJadwal(const vector<Jadwal>& jadwalList, const string& path) {
     ofstream out(path);
     // Tulis judul kolom pada baris pertama
-    out << "kode,stasiunAsal,stasiunTujuan,namaKereta,tanggal,waktuBerangkat,waktuTiba\n";
+    out << "kodeJadwal,stasiunAsal,stasiunTujuan,namaKereta,tanggal,waktuBerangkat,waktuTiba\n";
     for (const auto& j : jadwalList) {
         out << j.kode << "," << j.stasiunAsal << "," << j.stasiunTujuan << ","
             << j.namaKereta << "," << j.tanggal << ","
@@ -35,10 +35,10 @@ void FileIO::muatJadwal(vector<Jadwal>& jadwalList, const string& path) {
 
 void FileIO::simpanTiket(const vector<Pemesanan>& tiketList, const string& path) {
     ofstream out(path);
-    out << "pnr,namaPenumpang,nomorKursi,kodeKereta,confirmed\n";
+    out << "pnr,namaPenumpang,nomorKursi,kodeJadwal,confirmed\n";
     for (const auto& t : tiketList) {
         out << t.pnr << "," << t.namaPenumpang << "," << t.nomorKursi << ","
-            << t.kodeKereta << "," << t.confirmed << "\n";
+            << t.kodeJadwal << "," << t.confirmed << "\n";
     }
 }
 
@@ -55,12 +55,12 @@ void FileIO::muatTiket(vector<Pemesanan>& tiketList,
         getline(ss, p.pnr, ',');
         getline(ss, p.namaPenumpang, ',');
         getline(ss, p.nomorKursi, ',');
-        getline(ss, p.kodeKereta, ',');
+        getline(ss, p.kodeJadwal, ',');
         getline(ss, confirmedStr, ',');
         p.confirmed = (confirmedStr == "1" || confirmedStr == "true");
         if (p.confirmed) {
             tiketList.push_back(p);
-            kursiMap[p.kodeKereta].insert(p.nomorKursi);
+            kursiMap[p.kodeJadwal].insert(p.nomorKursi);
         }
     }
 }

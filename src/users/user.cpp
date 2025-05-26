@@ -21,7 +21,7 @@ void menuUser(ManagementSystem& sys) {
         cout << BLUE << "\\____/ \\___/\\____/  \\_/ \\____/\\_|  |_/\\_| \\_/\\_| |_/\\___/ " << endl;
         cout << WHITE 
                 << "\nMenu Penumpang:\n"
-                << "1. Lihat Jadwal\n"
+                << "1. Lihat Jadwal Kereta\n"
                 << "2. Cari Tiket Penumpang\n"
                 << "3. Kembali\n"
                 << "Pilih: ";
