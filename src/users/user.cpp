@@ -73,8 +73,8 @@ void menuUser(ManagementSystem& sys) {
                 Stack<Pemesanan> undoStack;
                 Pemesanan p;
                 bool selesaiInput = false;
-                cin.ignore();
                 while (!selesaiInput) {
+                    cin.ignore();
                     p = Pemesanan();
                     vector<Jadwal> daftar = sys.getJadwalManager().getJadwal();
                     if (daftar.empty()) {
@@ -88,12 +88,11 @@ void menuUser(ManagementSystem& sys) {
                     cout << "Pilihan: ";
                     int mode;
                     cin >> mode;
-                    
                     string hasilPilihan;
                     vector<Jadwal> hasil;
-                    if (mode == 1) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "asal", hasilPilihan);
-                    else if (mode == 2) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "tujuan", hasilPilihan);
-                    else if (mode == 3) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "kereta", hasilPilihan);
+                    if (mode == 1) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "Stasiun Asal", hasilPilihan);
+                    else if (mode == 2) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "Stasiun Tujuan", hasilPilihan);
+                    else if (mode == 3) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "Kereta", hasilPilihan);
                     else {
                         cout << "Pilihan tidak valid!\n";
                         continue;
@@ -128,6 +127,7 @@ void menuUser(ManagementSystem& sys) {
                              << endl;
                     }
                     cout << "\nPilih jadwal (nomor): ";
+                    cin.ignore();
                     int idxJadwal;
                     cin >> idxJadwal;
                     if (idxJadwal < 1 || idxJadwal > (int)hasil.size()) {
