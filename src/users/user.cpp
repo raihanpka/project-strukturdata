@@ -18,7 +18,7 @@ void menuUser(ManagementSystem& sys) {
         cout << WHITE 
                 << "Menu Penumpang:\n"
                 << "1. Lihat Jadwal Kereta\n"
-                << "2. Cari Tiket Penumpang\n"
+                << "2. Cari Data Penumpang berdasarkan PNR\n"
                 << "3. Pesan Tiket\n"
                 << "4. Kembali\n"
                 << "Pilih: ";
@@ -70,88 +70,106 @@ void menuUser(ManagementSystem& sys) {
             }
             case 3: {
                 header();
-                Stack<Pemesanan> undoStack; // Stack untuk fitur undo input
+                Stack<Pemesanan> undoStack;
                 Pemesanan p;
                 bool selesaiInput = false;
 
-                // Lambda untuk input field dengan validasi undo
-                auto inputField = [](const string& prompt, string& field) {
-                    cout << prompt;
-                    getline(cin, field);
-                    if (field == "0") return -1; // Kode untuk undo
-                    if (field == "1") return 1;  // Kode untuk skip
-                    return 0;
-                };
-
                 while (!selesaiInput) {
-                    p = Pemesanan(); // Reset data pesanan
-                    string stasiunAsal, stasiunTujuan, kereta, tanggal;
-                    while (true) {
-                        int res;
-                        cin.ignore();
-                        res = inputField("Nama Penumpang: ", p.namaPenumpang);
-                        if (res == -1) { cout << "Tidak ada data untuk undo.\n"; continue; }
-                        if (res == 1) break;
-
-                        res = inputField("Stasiun Asal: ", stasiunAsal);
-                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
-                        if (res == 1) break;
-
-                        res = inputField("Stasiun Tujuan: ", stasiunTujuan);
-                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
-                        if (res == 1) break;
-
-                        res = inputField("Nama Kereta: ", kereta);
-                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
-                        if (res == 1) break;
-                        
-                        while (true) {
-                            res = inputField("Tanggal Keberangkatan (DD-MM-YYYY): ", tanggal);
-                            if (sys.getJadwalManager().isValidTanggal(tanggal)) break;
-                            cout << "Format tanggal tidak valid. Harus DD-MM-YYYY.\n";
-                            if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
-                            if (res == 1) break;
-                        }
-
+                    p = Pemesanan();
+                    vector<Jadwal> daftar = sys.getJadwalManager().getJadwal();
+                    if (daftar.empty()) {
+                        cout << "Belum ada jadwal tersedia.\n";
                         break;
                     }
+                    cout << "Cari jadwal berdasarkan:\n";
+                    cout << "1. Stasiun Asal\n";
+                    cout << "2. Stasiun Tujuan\n";
+                    cout << "3. Nama Kereta\n";
+                    cout << "Pilihan: ";
+                    int mode;
+                    cin >> mode;
+                    cin.ignore();
 
-                    // Cari kode jadwal berdasarkan input user
-                    p.kodeJadwal = sys.getTiketManager().cariJadwalByPesanan(stasiunAsal, stasiunTujuan, kereta, tanggal);
-                    if (p.kodeJadwal.empty()) {
-                        cout << "Tidak ada jadwal yang ditemukan untuk input tersebut.\n";
+                    string hasilPilihan;
+                    vector<Jadwal> hasil;
+                    if (mode == 1) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "asal", hasilPilihan);
+                    else if (mode == 2) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "tujuan", hasilPilihan);
+                    else if (mode == 3) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "kereta", hasilPilihan);
+                    else {
+                        cout << "Pilihan tidak valid!\n";
+                        continue;
+                    }
+                    if (hasil.empty()) {
+                        cout << "Tidak ada jadwal untuk pilihan tersebut.\n";
                         continue;
                     }
 
-                    sys.getTiketManager().tampilkanJadwalByKode(p.kodeJadwal); // Tampilkan detail jadwal
-                    p.nomorKursi = sys.getTiketManager().generateBangku();    // Generate kursi acak
-                    cout << "Nomor Kursi     : " << p.nomorKursi << "\n";
-                    p.pnr = sys.getTiketManager().generatePNR();              // Generate PNR acak
+                    // Tampilkan semua jadwal hasil filter dan pilih salah satu
+                    cout << "\nDaftar Jadwal Tersedia:\n";
+                    cout << left
+                         << setw(5)  << "No"
+                         << setw(25) << "Nama Kereta"
+                         << setw(20) << "Stasiun Asal"
+                         << setw(20) << "Stasiun Tujuan"
+                         << setw(15) << "Tanggal"
+                         << setw(12) << "Berangkat"
+                         << setw(12) << "Tiba"
+                         << setw(15) << "Kode"
+                         << endl;
+                    cout << string(124, '-') << endl;
+                    for (size_t i = 0; i < hasil.size(); ++i) {
+                        cout << setw(5)  << i+1
+                             << setw(25) << hasil[i].namaKereta
+                             << setw(20) << hasil[i].stasiunAsal
+                             << setw(20) << hasil[i].stasiunTujuan
+                             << setw(15) << hasil[i].tanggal
+                             << setw(12) << hasil[i].waktuBerangkat
+                             << setw(12) << hasil[i].waktuTiba
+                             << setw(15) << hasil[i].kode
+                             << endl;
+                    }
+                    cout << "\nPilih jadwal (nomor): ";
+                    int idxJadwal;
+                    cin >> idxJadwal;
+                    cin.ignore();
+                    if (idxJadwal < 1 || idxJadwal > (int)hasil.size()) {
+                        cout << "\nPilihan tidak valid!\n";
+                        continue;
+                    }
+                    Jadwal jadwalDipilih = hasil[idxJadwal-1];
+
+                    // Input nama penumpang
+                    cout << "Nama Penumpang: ";
+                    getline(cin, p.namaPenumpang);
+
+                    p.kodeJadwal = jadwalDipilih.kode;
+                    sys.getTiketManager().tampilkanJadwalByKode(p.kodeJadwal);
+                    p.nomorKursi = sys.getTiketManager().generateBangku();
+                    cout << "\nNomor Kursi     : " << p.nomorKursi << "\n";
+                    p.pnr = sys.getTiketManager().generatePNR();
                     cout << "\nPNR yang digenerate: " << p.pnr << "\n";
 
-                    // Simpan ke stack undo
                     undoStack.push(p);
 
                     cout << "\nLanjutkan input? (tekan ENTER untuk lanjut, atau ketik 0 untuk undo): ";
                     string aksi;
                     getline(cin, aksi);
                     if (aksi == "0" && !undoStack.isEmpty()) {
-                        undoStack.pop(); // Undo input terakhir
+                        undoStack.pop();
                         cout << "Input terakhir dibatalkan. Silakan ENTER untuk input ulang!\n";
                         continue;
                     } else {
                         selesaiInput = true;
-                        // Hanya masukkan ke antrian di sini!
                         Pemesanan pesananFinal = undoStack.peek();
                         if (!sys.getTiketManager().isSeatAvailable(pesananFinal.kodeJadwal, pesananFinal.nomorKursi)) {
                             cout << "Kursi tidak tersedia!\n";
                         } else {
-                            sys.getTiketManager().tambahKeAntrian(pesananFinal); // Masukkan ke antrian
+                            sys.getTiketManager().tambahKeAntrian(pesananFinal);
                             cout << "\nPesanan telah masuk ke antrian.\n";
                         }
                         cout << "Tekan ENTER untuk melanjutkan...\n";
                         cin.get();
-                        sys.simpanKeFile(); // Simpan data ke file
+                        sys.simpanKeFile();
                     }
                 }
                 break;

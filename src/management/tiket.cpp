@@ -32,6 +32,43 @@ bool TiketManager::isSeatAvailable(const string& kodeJadwal, const string& seat)
     return it->second.find(seat) == it->second.end(); // True jika kursi belum dipesan
 }
 
+// Menampilkan pilihan jadwal berdasarkan field tertentu (asal, tujuan, kereta, tanggal)
+vector<Jadwal> TiketManager::tampilkanPilihanJadwal(const vector<Jadwal>& daftar, const string& field, string& hasilPilihan) {
+    vector<string> opsi;
+    vector<Jadwal> hasil;
+    // Kumpulkan opsi unik sesuai field
+    for (const auto& j : daftar) {
+        string val;
+        if (field == "Stasiun Asal") val = j.stasiunAsal;
+        else if (field == "Stasiun Tujuan") val = j.stasiunTujuan;
+        else if (field == "kereta") val = j.namaKereta;
+        if (find(opsi.begin(), opsi.end(), val) == opsi.end()) opsi.push_back(val);
+    }
+    // Tampilkan opsi ke user
+    cout << "\nPilih " << field << ":\n";
+    for (size_t i = 0; i < opsi.size(); ++i) {
+        cout << i+1 << ". " << opsi[i] << endl;
+    }
+    cout << "\nPilihan: ";
+    int idx;
+    cin >> idx;
+    cin.ignore();
+    if (idx < 1 || idx > (int)opsi.size()) {
+        cout << "Pilihan tidak valid!\n";
+        return {};
+    }
+    hasilPilihan = opsi[idx-1];
+    // Filter jadwal sesuai pilihan
+    for (const auto& j : daftar) {
+        if ((field == "asal" && j.stasiunAsal == hasilPilihan) ||
+            (field == "tujuan" && j.stasiunTujuan == hasilPilihan) ||
+            (field == "kereta" && j.namaKereta == hasilPilihan)) {
+            hasil.push_back(j);
+        }
+    }
+    return hasil;
+}
+
 // Mencari kode jadwal berdasarkan data pesanan (asal, tujuan, kereta, tanggal)
 extern vector<Jadwal> daftarJadwal;
 string TiketManager::cariJadwalByPesanan(

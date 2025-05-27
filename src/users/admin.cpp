@@ -117,8 +117,8 @@ void menuAdmin(ManagementSystem& sys) {
                             if (sys.getJadwalManager().isValidWaktu(jBaru.waktuBerangkat) && sys.getJadwalManager().isValidWaktu(jBaru.waktuTiba)) break;
                             cout << "Format waktu tidak valid. Harus JJ:MM.\n";
                         }
-                        // kode diperbarui
-                        jBaru.kode = sys.getJadwalManager().hashingKodeJadwal(jBaru.namaKereta, jBaru.stasiunAsal, jBaru.stasiunTujuan, jBaru.tanggal);
+                        // kode menggunakan kode lama
+                        jBaru.kode = kode;
                         try {
                             sys.getJadwalManager().editJadwal(kode, jBaru);
                             cout << "Jadwal berhasil diedit dengan kode jadwal baru: " << jBaru.kode << endl;

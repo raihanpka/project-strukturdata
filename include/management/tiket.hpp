@@ -20,6 +20,7 @@ private:
 public:
     std::string generatePNR() const;
     std::string generateBangku() const;
+    std::vector<Jadwal> tampilkanPilihanJadwal(const std::vector<Jadwal>& daftar, const std::string& field, std::string& hasilPilihan);
     bool isSeatAvailable(const std::string& kodeJadwal, const std::string& seat) const;
     std::string cariJadwalByPesanan(
         const std::string& asal,
