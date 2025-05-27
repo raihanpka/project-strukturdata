@@ -24,7 +24,7 @@ void menuUser(ManagementSystem& sys) {
                 << "1. Lihat Jadwal Kereta\n"
                 << "2. Cari Tiket Penumpang\n"
                 << "3. Pesan Tiket\n"
-                << "3. Kembali\n"
+                << "4. Kembali\n"
                 << "Pilih: ";
         cin >> choice;
 
@@ -149,6 +149,7 @@ void menuUser(ManagementSystem& sys) {
                         }
                         cout << "Tekan ENTER untuk melanjutkan...\n";
                         cin.get();
+                        sys.simpanKeFile();
                     }
                 }
             }

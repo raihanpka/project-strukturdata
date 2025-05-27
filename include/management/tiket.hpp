@@ -36,8 +36,10 @@ public:
     // Getters untuk akses baca saja (const)
     const std::vector<Pemesanan>& getDaftarPemesanan() const;
     const std::unordered_map<std::string, std::unordered_set<std::string>>& getKursiTerpesan() const;
+    const Queue<Pemesanan>& getAntrianPesanan() const;
 
     // Getters untuk akses modifikasi (non-const)
     std::vector<Pemesanan>& getMutableDaftarPemesanan();
     std::unordered_map<std::string, std::unordered_set<std::string>>& getMutableKursiTerpesan();
+    Queue<Pemesanan>& getMutableAntrian();
 };

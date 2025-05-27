@@ -155,3 +155,10 @@ const unordered_map<string, unordered_set<string>>& TiketManager::getKursiTerpes
 unordered_map<string, unordered_set<string>>& TiketManager::getMutableKursiTerpesan() {
     return kursiTerpesan;
 }
+
+const Queue<Pemesanan>& TiketManager::getAntrianPesanan() const {
+    return antrianPemesanan;
+}
+Queue<Pemesanan>& TiketManager::getMutableAntrian() {
+    return antrianPemesanan;
+}
