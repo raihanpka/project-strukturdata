@@ -150,6 +150,7 @@ void TiketManager::prosesAntrianPesanan() {
     }
     cout << "Semua antrian pemesanan telah diproses.\n";
     cout << "Tekan ENTER untuk melanjutkan...";
+    cin.get();
 }
 
 // Menampilkan seluruh antrian pemesanan tiket
