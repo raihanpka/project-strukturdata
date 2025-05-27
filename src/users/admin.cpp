@@ -10,18 +10,14 @@
 
 using namespace std;
 
+// Fungsi utama menu untuk admin
 void menuAdmin(ManagementSystem& sys) {
     int choice;
     do {
-        clrscr();
-        cout << BLUE << " _____ _____ _____ _____ ________  ___ _   __  ___  _____ " << endl;
-        cout << BLUE << "/  ___|_   _/  ___|_   _|  ___|  \\/  || | / / / _ \\|_   _|" << endl;
-        cout << BLUE << "\\ `--.  | | \\ `--.  | | | |__ | .  . || |/ / / /_\\ \\ | |  " << endl;
-        cout << BLUE << " `--. \\ | |  `--. \\ | | |  __|| |\\/| ||    \\ |  _  | | |  " << endl;
-        cout << BLUE << "/\\__/ /_| |_/\\__/ / | | | |___| |  | || |\\  \\| | | |_| |_ " << endl;
-        cout << BLUE << "\\____/ \\___/\\____/  \\_/ \\____/\\_|  |_/\\_| \\_/\\_| |_/\\___/ " << endl;
+        // Tampilkan judul dan menu utama admin
+        header();
         cout << WHITE  
-                << "\nMenu Admin:\n"
+                << "Menu Admin:\n"
                 << "1. Kelola Jadwal Kereta\n"
                 << "2. Kelola Tiket Penumpang\n"
                 << "3. Lihat Jadwal Kereta\n"
@@ -29,10 +25,10 @@ void menuAdmin(ManagementSystem& sys) {
                 << "Pilih: ";
         cin >> choice;
 
-        // Validasi apakah input adalah angka
+        // Validasi input angka
         if (cin.fail()) {
-            cin.clear(); // Clear the error flag
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the invalid input
+            cin.clear(); // Reset error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Buang input tidak valid
             cout << "Input tidak valid. Silakan masukkan angka.\n";
             cout << "Tekan ENTER untuk melanjutkan...";
             cin.get();
@@ -40,11 +36,12 @@ void menuAdmin(ManagementSystem& sys) {
         }
         
         switch(choice) {
-            case 1: {
+            case 1: { // Kelola Jadwal Kereta
                 int subChoice;
                 do {
-                    sys.muatDariFile();
-                    cout << "\nKelola Jadwal Kereta:\n";
+                    sys.muatDariFile(); // Muat data terbaru dari file
+                    header();
+                    cout << "Kelola Jadwal Kereta:\n";
                     cout << "1. Tambah Jadwal\n";
                     cout << "2. Edit Jadwal\n";
                     cout << "3. Hapus Jadwal\n";
@@ -58,7 +55,9 @@ void menuAdmin(ManagementSystem& sys) {
                         continue;
                     }
                     cin.ignore();
-                    if (subChoice == 1) {
+                    if (subChoice == 1) { 
+                        header();
+                        // Tambah Jadwal
                         Jadwal j;
                         cout << "Stasiun Asal: ";
                         getline(cin, j.stasiunAsal);
@@ -83,15 +82,17 @@ void menuAdmin(ManagementSystem& sys) {
                         j.kode = sys.getJadwalManager().hashingKodeJadwal(j.namaKereta, j.stasiunAsal, j.stasiunTujuan, j.tanggal);
                         cout << "\nKode Kereta yang digenerate: " << j.kode << "\n";
                         try {
-                            sys.getJadwalManager().tambahJadwal(j);
-                            sys.getJadwalManager().prosesKonfirmasiJadwal();
+                            sys.getJadwalManager().tambahJadwal(j); // Tambah ke daftar
+                            sys.getJadwalManager().prosesKonfirmasiJadwal(); // Konfirmasi admin
                         } catch (const exception& e) {
                             cout << "Terjadi error: " << e.what() << "\n";
                         }
                         cout << "Tekan ENTER untuk melanjutkan...";
                         cin.get();
                         sys.simpanKeFile();
-                    } else if (subChoice == 2) {
+                    } else if (subChoice == 2) { 
+                        header();
+                        // Edit Jadwal
                         string kode;
                         cout << "Masukkan kode jadwal yang akan diedit: ";
                         getline(cin, kode);
@@ -127,7 +128,9 @@ void menuAdmin(ManagementSystem& sys) {
                         cout << "Tekan ENTER untuk melanjutkan...";
                         cin.get();
                         sys.simpanKeFile();
-                    } else if (subChoice == 3) {
+                    } else if (subChoice == 3) { 
+                        header();
+                        // Hapus Jadwal
                         string kode;
                         cout << "Masukkan kode jadwal yang akan dihapus: ";
                         getline(cin, kode);
@@ -148,24 +151,28 @@ void menuAdmin(ManagementSystem& sys) {
                 } while (subChoice != 4);
                 break;
             }
-            case 2: {
-                cout << "\nKelola Tiket Penumpang:\n";
+            case 2: { 
+                header();
+                // Kelola Tiket Penumpang
+                cout << "Kelola Tiket Penumpang:\n";
                 cout << "1. Proses pemesanan tiket penumpang\n";
                 cout << "2. Cek antrian pemesanan\n";
                 cout << "Pilih: ";
                 int prosesPilihan;
                 cin >> prosesPilihan;
                 if (prosesPilihan == 1) {
-                    sys.getTiketManager().prosesAntrianPesanan();
+                    sys.getTiketManager().prosesAntrianPesanan(); // Proses antrian tiket
                 } else if (prosesPilihan == 2) {
-                    sys.getTiketManager().cekAntrianPesanan();
+                    sys.getTiketManager().cekAntrianPesanan(); // Lihat antrian tiket
                 } else {
                     cout << "Pilihan tidak valid!\n";
                 }
                 sys.simpanKeFile();
                 break;
             }
-            case 3: {
+            case 3: { 
+                header();
+                // Lihat Jadwal Kereta
                 sys.muatDariFile();
                 string tanggal;
                 while (true) {
@@ -178,7 +185,7 @@ void menuAdmin(ManagementSystem& sys) {
                 sys.getJadwalManager().tampilkanJadwal(tanggal);
                 break;
             }
-            case 4 : {
+            case 4 : { // Kembali ke menu utama
                 cout << "Kembali ke menu utama...\n";
                 return;
             }

@@ -18,10 +18,13 @@ void ManagementSystem::simpanKeFile() const {
     FileIO::simpanAntrian(tiketManager.getAntrianPesanan(), "data/antrian.csv");
 }
 
+// Constructor untuk ManagementSystem
+// Getter untuk UserContext, JadwalManager, dan TiketManager
 UserContext& ManagementSystem::getUser() { 
     return user; 
 }
 
+// 
 JadwalManager& ManagementSystem::getJadwalManager() { 
     return jadwalManager; 
 }
