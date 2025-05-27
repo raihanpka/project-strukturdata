@@ -38,12 +38,15 @@ Sistem ini memungkinkan admin untuk mengelola jadwal kereta dan tiket penumpang,
   - Proses antrian tiket secara manual/otomatis oleh admin
   - Stack undo untuk input pemesanan tiket (user bisa membatalkan input terakhir)
   - Pencarian tiket berdasarkan PNR
-  - Pencarian pesanan berdasarkan data jadwal (asal, tujuan, kereta, tanggal)
+  - **Pemesanan tiket berbasis pilihan**:  
+    Pengguna dapat memesan tiket dengan memilih stasiun asal, stasiun tujuan, atau nama kereta dari daftar opsi yang tersedia (bukan mengetik manual).  
+    Setelah memilih, pengguna akan melihat daftar jadwal yang sesuai dan dapat memilih jadwal dengan memasukkan nomor urutnya.
+  - Validasi ketersediaan kursi secara otomatis (kursi dan PNR digenerate otomatis, jika kursi sudah terisi akan dicari kursi lain).
 
 - **Validasi Data**  
   - Validasi format tanggal dan waktu
   - Validasi ketersediaan kursi
-  - Validasi input menu
+  - Validasi input menu (hanya menerima angka untuk pilihan menu dan opsi)
 
 - **Penyimpanan Data**  
   - Data jadwal dan tiket disimpan dalam file CSV (`data/jadwal.csv`, `data/pemesanan.csv`)
@@ -132,8 +135,14 @@ projectakhir-strukturdata/
    - **Cari Tiket Penumpang**
      - Cari tiket berdasarkan PNR.
    - **Pesan Tiket**
-     - Isi data penumpang, asal, tujuan, kereta, tanggal.
-     - Sistem akan mencari jadwal yang cocok dan generate kode.
+     - Pilih cara pencarian jadwal:  
+       - Berdasarkan **Stasiun Asal**
+       - Berdasarkan **Stasiun Tujuan**
+       - Berdasarkan **Nama Kereta**
+     - Sistem akan menampilkan daftar opsi (misal daftar stasiun asal yang tersedia), user memilih dengan memasukkan angka.
+     - Setelah memilih, sistem menampilkan daftar jadwal yang sesuai. User memilih jadwal dengan angka.
+     - Input nama penumpang.
+     - Sistem akan otomatis meng-generate nomor kursi dan kode booking (PNR).
      - Fitur undo: sebelum konfirmasi, user bisa membatalkan input terakhir.
      - Setelah konfirmasi, pesanan masuk ke antrian dan akan disimpan di `data/antrian.csv` dan menunggu diproses admin.
 

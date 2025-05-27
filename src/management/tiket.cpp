@@ -101,7 +101,7 @@ void TiketManager::tampilkanJadwalByKode(const string& kodeJadwal) const {
              << "Waktu Berangkat : " << it->waktuBerangkat << "\n"
              << "Waktu Tiba      : " << it->waktuTiba << "\n";
     } else {
-        cout << "Jadwal dengan kode kereta " << kodeJadwal << " tidak ditemukan.\n";
+        cout << "Jadwal dengan kode " << kodeJadwal << " tidak ditemukan.\n";
     }
 }
 
@@ -119,10 +119,10 @@ void TiketManager::prosesAntrianPesanan() {
         if (isSeatAvailable(p.kodeJadwal, p.nomorKursi)) {
             p.confirmed = 1; // Tandai sudah dikonfirmasi
             daftarPemesanan.push_back(p); // Masukkan ke daftar pemesanan
-            cout << "Kursi " << p.nomorKursi << " pada kereta " << p.kodeJadwal
+            cout << "Kursi " << p.nomorKursi << " pada kode " << p.kodeJadwal
                  << " berhasil dipesan untuk penumpang " << p.namaPenumpang << ".\n";
         } else {
-            cout << "Kursi " << p.nomorKursi << " pada kereta " << p.kodeJadwal << " sudah dipesan.\n";
+            cout << "Kursi " << p.nomorKursi << " pada kode " << p.kodeJadwal << " sudah dipesan.\n";
             cout << "Pesanan untuk penumpang " << p.namaPenumpang << " tidak dapat dilanjutkan.\n";
             // Ulangi generate kursi baru sampai dapat yang tersedia maksimal 10 kali
             const int maxPercobaan = 10;
@@ -207,7 +207,7 @@ void TiketManager::tampilkanTiketByPNR(const string& pnr) const {
              << "PNR         : " << it->pnr << "\n"
              << "Nama        : " << it->namaPenumpang << "\n"
              << "Kursi       : " << it->nomorKursi << "\n"
-             << "Kode Kereta : " << it->kodeJadwal << "\n";
+             << "Kode Jadwal : " << it->kodeJadwal << "\n";
         tampilkanJadwalByKode(it->kodeJadwal); // Tampilkan detail jadwal
     } else {
         cout << "Tiket dengan PNR " << pnr << " tidak ditemukan.\n";
