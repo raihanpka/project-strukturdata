@@ -74,7 +74,6 @@ void menuUser(ManagementSystem& sys) {
                 Pemesanan p;
                 bool selesaiInput = false;
                 while (!selesaiInput) {
-                    cin.ignore();
                     p = Pemesanan();
                     vector<Jadwal> daftar = sys.getJadwalManager().getJadwal();
                     if (daftar.empty()) {
@@ -127,7 +126,6 @@ void menuUser(ManagementSystem& sys) {
                              << endl;
                     }
                     cout << "\nPilih jadwal (nomor): ";
-                    cin.ignore();
                     int idxJadwal;
                     cin >> idxJadwal;
                     if (idxJadwal < 1 || idxJadwal > (int)hasil.size()) {
@@ -136,16 +134,17 @@ void menuUser(ManagementSystem& sys) {
                     }
                     Jadwal jadwalDipilih = hasil[idxJadwal-1];
 
+                    cin.ignore();
                     // Input nama penumpang
-                    cout << "Nama Penumpang: ";
+                    cout << "Masukkan Nama Lengkap Penumpang: ";
                     getline(cin, p.namaPenumpang);
 
                     p.kodeJadwal = jadwalDipilih.kode;
                     sys.getTiketManager().tampilkanJadwalByKode(p.kodeJadwal);
                     p.nomorKursi = sys.getTiketManager().generateBangku();
-                    cout << "\nNomor Kursi     : " << p.nomorKursi << "\n";
+                    cout << "Nomor Kursi     : " << p.nomorKursi << "\n";
                     p.pnr = sys.getTiketManager().generatePNR();
-                    cout << "\nPNR yang digenerate: " << p.pnr << "\n";
+                    cout << "Kode Booking PNR: " << p.pnr << "\n";
 
                     undoStack.push(p);
 

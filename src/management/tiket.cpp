@@ -94,7 +94,7 @@ void TiketManager::tampilkanJadwalByKode(const string& kodeJadwal) const {
     });
 
     if (it != daftarJadwal.end()) {
-        cout << "\nJadwal Kereta:\n"
+        cout << "\nJadwal Kereta\n"
              << "Nama Kereta     : " << it->namaKereta << "\n"
              << "Stasiun Asal    : " << it->stasiunAsal << "\n"
              << "Stasiun Tujuan  : " << it->stasiunTujuan << "\n"
@@ -121,13 +121,35 @@ void TiketManager::prosesAntrianPesanan() {
             daftarPemesanan.push_back(p); // Masukkan ke daftar pemesanan
             cout << "Kursi " << p.nomorKursi << " pada kereta " << p.kodeJadwal
                  << " berhasil dipesan untuk penumpang " << p.namaPenumpang << ".\n";
-            cout << "Tekan ENTER untuk melanjutkan...\n";
-            cin.get();
         } else {
             cout << "Kursi " << p.nomorKursi << " pada kereta " << p.kodeJadwal << " sudah dipesan.\n";
+            cout << "Pesanan untuk penumpang " << p.namaPenumpang << " tidak dapat dilanjutkan.\n";
+            // Ulangi generate kursi baru sampai dapat yang tersedia maksimal 10 kali
+            const int maxPercobaan = 10;
+            int percobaan = 0;
+            bool berhasil = false;
+            while (percobaan < maxPercobaan) {
+                p.nomorKursi = generateBangku(); // Generate kursi baru
+                cout << "Kursi baru yang dialokasikan: " << p.nomorKursi << "\n";
+                if (isSeatAvailable(p.kodeJadwal, p.nomorKursi)) {
+                    p.confirmed = 1; // Tandai sudah dikonfirmasi
+                    daftarPemesanan.push_back(p); // Masukkan ke daftar pemesanan
+                    cout << "Kursi " << p.nomorKursi << " berhasil dipesan untuk penumpang " << p.namaPenumpang << ".\n";
+                    berhasil = true;
+                    break;
+                } else {
+                    cout << "Kursi " << p.nomorKursi << " juga sudah dipesan. Mencoba lagi...\n";
+                }
+                ++percobaan;
+            }
+            if (!berhasil) {
+                cout << "Tidak dapat menemukan kursi yang tersedia setelah " << maxPercobaan << " percobaan. Pesanan dibatalkan.\n";
+            }
         }
         antrianPemesanan.dequeue(); // Hapus dari antrian
     }
+    cout << "Semua antrian pemesanan telah diproses.\n";
+    cout << "Tekan ENTER untuk melanjutkan...";
 }
 
 // Menampilkan seluruh antrian pemesanan tiket
