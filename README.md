@@ -111,12 +111,12 @@ projectakhir-strukturdata/
      - Tambah jadwal: Isi data lengkap, sistem akan generate kode otomatis.
      - Edit jadwal: Cari berdasarkan kode, ubah data.
      - Hapus jadwal: Cari berdasarkan kode.
-     - Semua perubahan harus dikonfirmasi (stack konfirmasi).
+     - Semua perubahan harus dikonfirmasi (dengan stack).
    - **Kelola Tiket Penumpang**
-     - Proses antrian pemesanan tiket (otomatis/manual).
+     - Proses antrian pemesanan dengan memuat data dari `Queue<Pemesanan> antrianPemesanan` atau `data/antrian.csv` saat program sudah diclose.
      - Cek antrian pemesanan.
    - **Lihat Jadwal Kereta**
-     - Tampilkan seluruh jadwal atau filter berdasarkan tanggal.
+     - Tampilkan seluruh jadwal dengan filter berdasarkan tanggal.
 
 3. **Penyimpanan**
    - Semua perubahan otomatis disimpan ke file setelah aksi.
@@ -125,14 +125,14 @@ projectakhir-strukturdata/
 
 1. **Menu Pengguna**
    - **Lihat Jadwal Kereta**
-     - Tampilkan jadwal berdasarkan tanggal.
+     - Tampilkan jadwal dengan filter berdasarkan tanggal.
    - **Cari Tiket Penumpang**
      - Cari tiket berdasarkan PNR.
    - **Pesan Tiket**
-     - Isi data penumpang, asal, tujuan, kereta, tanggal, kursi.
+     - Isi data penumpang, asal, tujuan, kereta, tanggal.
      - Sistem akan mencari jadwal yang cocok dan generate kode.
      - Fitur undo: sebelum konfirmasi, user bisa membatalkan input terakhir.
-     - Setelah konfirmasi, pesanan masuk ke antrian dan menunggu diproses admin.
+     - Setelah konfirmasi, pesanan masuk ke antrian dan akan disiimpan di `data/antrian.csv` dan menunggu diproses admin.
 
 ---
 
@@ -144,9 +144,14 @@ projectakhir-strukturdata/
 - **File:** `data/jadwal.csv`
 
 ### Data Pemesanan (Pemesanan)
-- **Field:** pnr, namaPenumpang, nomorKursi, kodeJadwal, stasiunAsal, stasiunTujuan, namaKereta, tanggal, confirmed
+- **Field:** pnr, namaPenumpang, nomorKursi, kodeJadwal, confirmed = 0
 - **Disimpan di:** `vector<Pemesanan> daftarPemesanan`
 - **File:** `data/pemesanan.csv`
+
+### Data Antrian (Pemesanan Tiket)
+- **Field:** pnr, namaPenumpang, nomorKursi, kodeJadwal, confirmed = 1
+- **Disimpan di:** `Queue<Pemesanan> antrianPemesanan`
+- **File:** `data/antrian.csv`
 
 ---
 
@@ -187,5 +192,3 @@ Sistem aplikasi ini dibuat oleh **Kelompok 6** dari **Paralel 1**
 - Raihan Putra Kirana  
 - Tristian Yosa  
 - Grasela Anggi Asimima Marbun
-
----
