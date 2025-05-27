@@ -43,6 +43,7 @@ void menuAdmin(ManagementSystem& sys) {
             case 1: {
                 int subChoice;
                 do {
+                    sys.muatDariFile();
                     cout << "\nKelola Jadwal Kereta:\n";
                     cout << "1. Tambah Jadwal\n";
                     cout << "2. Edit Jadwal\n";
@@ -165,16 +166,15 @@ void menuAdmin(ManagementSystem& sys) {
                 break;
             }
             case 3: {
+                sys.muatDariFile();
                 string tanggal;
-                do {
-                    while (true) {
+                while (true) {
                         cout << "Masukkan tanggal (DD-MM-YYYY): ";
                         cin.ignore();
                         getline(cin, tanggal);
                         if (sys.getJadwalManager().isValidTanggal(tanggal)) break;
                         cout << "Format tanggal tidak valid. Harus DD-MM-YYYY.\n";
-                    }
-                } while(true);
+                }
                 sys.getJadwalManager().tampilkanJadwal(tanggal);
                 break;
             }

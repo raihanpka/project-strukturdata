@@ -46,5 +46,27 @@ size_t Queue<T>::size() const {
     return count;
 }
 
+template <typename T>
+Queue<T>::Queue(const Queue<T>& other) : front(nullptr), rear(nullptr), count(0) {
+    Node* curr = other.front;
+    while (curr) {
+        enqueue(curr->data);
+        curr = curr->next;
+    }
+}
+
+template <typename T>
+Queue<T>& Queue<T>::operator=(const Queue<T>& other) {
+    if (this != &other) {
+        while (!isEmpty()) dequeue();
+        Node* curr = other.front;
+        while (curr) {
+            enqueue(curr->data);
+            curr = curr->next;
+        }
+    }
+    return *this;
+}
+
 template class Queue<std::string>;
 template class Queue<Pemesanan>;

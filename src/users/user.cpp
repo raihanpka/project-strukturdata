@@ -40,6 +40,7 @@ void menuUser(ManagementSystem& sys) {
         
         switch(choice) {
             case 1: {
+                sys.muatDariFile();
                 string tanggal;
                 cin.ignore();
                 while (true) {
@@ -55,6 +56,7 @@ void menuUser(ManagementSystem& sys) {
                 break;
             }
             case 2: {
+                sys.muatDariFile();
                 string pnr;
                 cout << "Masukkan PNR Tiket: ";
                 cin.ignore();
@@ -129,8 +131,7 @@ void menuUser(ManagementSystem& sys) {
                     // Simpan ke stack undo
                     undoStack.push(p);
 
-                    cout << "\nKetik 0 untuk membatalkan atau undo, atau 1 untuk lanjut ke antrian.\n";
-                    cout << "Lanjutkan input? (tekan ENTER untuk lanjut, atau ketik 0 untuk undo): ";
+                    cout << "\nLanjutkan input? (tekan ENTER untuk lanjut, atau ketik 0 untuk undo): ";
                     string aksi;
                     getline(cin, aksi);
                     if (aksi == "0" && !undoStack.isEmpty()) {

@@ -14,7 +14,7 @@
   - [Sebagai Pengguna](#sebagai-pengguna)
 - [Penjelasan Data & Struktur](#penjelasan-data--struktur)
 - [Penjelasan Fitur Data Structure](#penjelasan-fitur-data-structure)
-- [Pengembangan & Debugging](pengembangan--debugging)
+- [Pengembangan & Debugging](#pengembangan--debugging)
 - [Kredit](#kredit)
 
 ---
@@ -47,6 +47,7 @@ Sistem ini memungkinkan admin untuk mengelola jadwal kereta dan tiket penumpang,
 
 - **Penyimpanan Data**  
   - Data jadwal dan tiket disimpan dalam file CSV (`data/jadwal.csv`, `data/pemesanan.csv`)
+  - Data antrian pemesanan disimpan di `data/antrian.csv` agar antrian tetap ada meski program ditutup
   - Data dimuat otomatis saat program dijalankan
 
 ---
@@ -71,7 +72,8 @@ projectakhir-strukturdata/
 ├── data/
 │   ├── admin_credentials.txt # Data login admin
 │   ├── jadwal.csv            # Data jadwal kereta
-│   └── pemesanan.csv         # Data tiket penumpang
+│   ├── pemesanan.csv         # Data tiket penumpang
+│   └── antrian.csv           # Data antrian pemesanan tiket (persisten)
 │
 ├── Makefile                # Build system
 └── README.md               # Dokumentasi ini
@@ -113,13 +115,14 @@ projectakhir-strukturdata/
      - Hapus jadwal: Cari berdasarkan kode.
      - Semua perubahan harus dikonfirmasi (dengan stack).
    - **Kelola Tiket Penumpang**
-     - Proses antrian pemesanan dengan memuat data dari `Queue<Pemesanan> antrianPemesanan` atau `data/antrian.csv` saat program sudah diclose.
+     - Proses antrian pemesanan dengan memuat data dari `Queue<Pemesanan> antrianPemesanan` atau `data/antrian.csv`.
      - Cek antrian pemesanan.
    - **Lihat Jadwal Kereta**
      - Tampilkan seluruh jadwal dengan filter berdasarkan tanggal.
 
 3. **Penyimpanan**
    - Semua perubahan otomatis disimpan ke file setelah aksi.
+   - Antrian pemesanan juga disimpan ke `data/antrian.csv` agar tidak hilang saat program ditutup.
 
 ### Sebagai Pengguna
 
@@ -132,7 +135,7 @@ projectakhir-strukturdata/
      - Isi data penumpang, asal, tujuan, kereta, tanggal.
      - Sistem akan mencari jadwal yang cocok dan generate kode.
      - Fitur undo: sebelum konfirmasi, user bisa membatalkan input terakhir.
-     - Setelah konfirmasi, pesanan masuk ke antrian dan akan disiimpan di `data/antrian.csv` dan menunggu diproses admin.
+     - Setelah konfirmasi, pesanan masuk ke antrian dan akan disimpan di `data/antrian.csv` dan menunggu diproses admin.
 
 ---
 
@@ -162,17 +165,17 @@ projectakhir-strukturdata/
   - Stack konfirmasi jadwal (admin harus konfirmasi sebelum jadwal aktif).
 
 - **Queue (Template Manual)**
-  - Antrian pemesanan tiket (pesanan masuk ke queue, admin memproses satu per satu).
+  - Antrian pemesanan tiket (pesanan masuk ke queue, lalu admin akan memprosesnya).
+  - Queue sudah mendukung deep copy, sehingga aman untuk iterasi dan penyimpanan.
 
 - **Sorting - Quick Sort (Template Manual)**
-  - Mengurutkan jadwal kereta api berdasarkan hari dan jam nya (jadwal masuk ke `vector<Jadwal> daftarJadwal`, lalu diproses dengan fungsi `quicksort`).
+  - Mengurutkan jadwal kereta api berdasarkan hari dan jam-nya (jadwal masuk ke `vector<Jadwal> daftarJadwal`, lalu diproses dengan fungsi `quicksort`).
 
 - **Hashing dengan Unordered Map & Set (STL)**
-  - Melacak data tiket penumpang yang sudah dipesan untuk setiap jadwal.
+  - Melacak data tiket penumpang yang sudah dipesan untuk setiap jadwal (untuk validasi kursi).
 
 - **Vector (STL)**
   - Menyimpan daftar jadwal dan daftar pemesanan.
-
 
 ---
 
@@ -183,6 +186,8 @@ projectakhir-strukturdata/
 - **Jika data tidak muncul saat cek antrian, cek kecocokan kodeJadwal antara pemesanan dan jadwal.**
 - **Periksa file CSV jika terjadi error pada load/save data.**
 - **Gunakan debug print pada daftarJadwal dan daftarPemesanan jika perlu.**
+- **Jika terjadi error double free atau crash saat memproses antrian, pastikan tidak ada shallow copy pada queue dan gunakan deep copy atau iterasi node manual.**
+- **Selalu inisialisasi random seed (`srand(time(0));`) di awal program agar hasil generate PNR dan bangku selalu acak.**
 
 ---
 

@@ -15,6 +15,9 @@ void FileIO::simpanJadwal(const vector<Jadwal>& jadwalList, const string& path) 
 }
 
 void FileIO::muatJadwal(vector<Jadwal>& jadwalList, const string& path) {
+    while (!jadwalList.empty()) {
+        jadwalList.pop_back();
+    }
     ifstream in(path);
     string line;
     getline(in, line);
@@ -44,6 +47,9 @@ void FileIO::simpanTiket(const vector<Pemesanan>& tiketList, const string& path)
 void FileIO::muatTiket(vector<Pemesanan>& tiketList,
                        unordered_map<string, unordered_set<string>>& kursiMap,
                        const string& path) {
+    while (!tiketList.empty()) {
+        tiketList.pop_back();
+    }
     ifstream in(path);
     string line;
     getline(in, line);
@@ -71,24 +77,29 @@ void FileIO::simpanAntrian(const Queue<Pemesanan>& antrianList, const string& pa
     while (!tempQueue.isEmpty()) {
         Pemesanan t = tempQueue.peek();
         out << t.pnr << "," << t.namaPenumpang << "," << t.nomorKursi << ","
-            << t.kodeJadwal << "," << t.confirmed << "\n";
+            << t.kodeJadwal << "," << (t.confirmed ? "1" : "0") << "\n";
         tempQueue.dequeue();
     }
 }
+
 void FileIO::muatAntrian(Queue<Pemesanan>& antrianList, const string& path) {
+    while (!antrianList.isEmpty()) {
+        antrianList.dequeue();
+    }
     ifstream in(path);
     string line;
-    getline(in, line);
+    getline(in, line); 
     while (getline(in, line)) {
+        if (line.empty()) continue;
         stringstream ss(line);
         Pemesanan p;
         string confirmedStr;
-        getline(ss, p.pnr, ',');
-        getline(ss, p.namaPenumpang, ',');
-        getline(ss, p.nomorKursi, ',');
-        getline(ss, p.kodeJadwal, ',');
-        getline(ss, confirmedStr, ',');
-        p.confirmed = (confirmedStr == "0" || confirmedStr == "false");
+        if (!getline(ss, p.pnr, ',') ||
+            !getline(ss, p.namaPenumpang, ',') ||
+            !getline(ss, p.nomorKursi, ',') ||
+            !getline(ss, p.kodeJadwal, ',')) {
+            continue;
+        }
         antrianList.enqueue(p);
     }
 }

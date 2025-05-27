@@ -19,6 +19,9 @@ private:
 public:
     Queue();
     ~Queue();
+    Queue(const Queue& other);
+    Node* getFront() const { return front; }
+    Queue& operator=(const Queue& other);
     void enqueue(const T& val);
     void dequeue();
     const T& peek() const;

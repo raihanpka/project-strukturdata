@@ -69,10 +69,17 @@ void TiketManager::tambahKeAntrian(const Pemesanan& pemesanan) {
 
 // Memproses antrian semua pemesanan tiket menggunakan queue
 void TiketManager::prosesAntrianPesanan() {
+    cin.ignore();
+    cout << "\nMemproses antrian pemesanan tiket...\n";
     while (!antrianPemesanan.isEmpty()) {
         Pemesanan p = antrianPemesanan.peek();
         if (isSeatAvailable(p.kodeJadwal, p.nomorKursi)) {
-            konfirmasiPemesanan.push(p);
+            p.confirmed = 1;
+            daftarPemesanan.push_back(p);
+            cout << "Kursi " << p.nomorKursi << " pada kereta " << p.kodeJadwal
+                 << " berhasil dipesan untuk penumpang " << p.namaPenumpang << ".\n";
+            cout << "Tekan ENTER untuk melanjutkan...\n";
+            cin.get();
         } else {
             cout << "Kursi " << p.nomorKursi << " pada kereta " << p.kodeJadwal << " sudah dipesan.\n";
         }
@@ -94,11 +101,10 @@ void TiketManager::cekAntrianPesanan() const {
              << "| No  | Nama Penumpang       | Kode Jadwal          | Nama Kereta              | Berangkat   | Tiba        | Kursi      |\n"
              << "+-----+----------------------+----------------------+--------------------------+-------------+-------------+------------+\n";
         int no = 1;
-        auto tempQueue = antrianPemesanan;
-        while (!tempQueue.isEmpty()) {
-            Pemesanan p = tempQueue.peek();
+        auto curr = antrianPemesanan.getFront();
+        while (curr != nullptr) {
+            Pemesanan p = curr->data;
             string namaKereta = "-", waktuBerangkat = "-", waktuTiba = "-";
-            // Cari data jadwal yang sesuai kodeJadwal di daftarJadwal
             for (const auto& j : daftarJadwal) {
                 if (j.kode == p.kodeJadwal) {
                     namaKereta = j.namaKereta;
@@ -114,7 +120,7 @@ void TiketManager::cekAntrianPesanan() const {
                  << "| " << left << setw(12) << waktuBerangkat
                  << "| " << left << setw(12) << waktuTiba
                  << "| " << left << setw(11) << p.nomorKursi << "|\n";
-            tempQueue.dequeue();
+            curr = curr->next;
         }
         cout << "+-----+----------------------+----------------------+--------------------------+-------------+-------------+------------+\n";
         cout << "\nTekan ENTER untuk melanjutkan...";
