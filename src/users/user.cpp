@@ -38,8 +38,8 @@ void menuUser(ManagementSystem& sys) {
             case 1: {
                 sys.muatDariFile(); // Muat data terbaru dari file
                 header();
-                string tanggal;
                 cin.ignore();
+                string tanggal;
                 while (true) {
                     cout << "Masukkan Tanggal (DD-MM-YYYY): ";
                     getline(cin, tanggal);
@@ -55,6 +55,7 @@ void menuUser(ManagementSystem& sys) {
             case 2: {
                 sys.muatDariFile(); // Muat data terbaru dari file
                 header();
+                cin.ignore();
                 string pnr;
                 cout << "Masukkan PNR Tiket: ";
                 cin.ignore();
@@ -70,6 +71,7 @@ void menuUser(ManagementSystem& sys) {
             }
             case 3: {
                 header();
+                cin.ignore();
                 Stack<Pemesanan> undoStack;
                 Pemesanan p;
                 bool selesaiInput = false;

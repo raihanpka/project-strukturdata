@@ -54,9 +54,9 @@ void menuAdmin(ManagementSystem& sys) {
                         cout << "Input tidak valid. Silakan masukkan angka.\n";
                         continue;
                     }
-                    cin.ignore();
                     if (subChoice == 1) { 
                         header();
+                        cin.ignore();
                         // Tambah Jadwal
                         Jadwal j;
                         cout << "Stasiun Asal: ";
@@ -92,6 +92,7 @@ void menuAdmin(ManagementSystem& sys) {
                         sys.simpanKeFile();
                     } else if (subChoice == 2) { 
                         header();
+                        cin.ignore();
                         // Edit Jadwal
                         string kode;
                         cout << "Masukkan kode jadwal yang akan diedit: ";
@@ -130,6 +131,7 @@ void menuAdmin(ManagementSystem& sys) {
                         sys.simpanKeFile();
                     } else if (subChoice == 3) { 
                         header();
+                        cin.ignore();
                         // Hapus Jadwal
                         string kode;
                         cout << "Masukkan kode jadwal yang akan dihapus: ";
@@ -153,6 +155,7 @@ void menuAdmin(ManagementSystem& sys) {
             }
             case 2: { 
                 header();
+                cin.ignore();
                 // Kelola Tiket Penumpang
                 cout << "Kelola Tiket Penumpang:\n";
                 cout << "1. Proses pemesanan tiket penumpang\n";
@@ -171,9 +174,10 @@ void menuAdmin(ManagementSystem& sys) {
                 break;
             }
             case 3: { 
-                header();
                 // Lihat Jadwal Kereta
                 sys.muatDariFile();
+                header();
+                cin.ignore();
                 string tanggal;
                 while (true) {
                         cout << "Masukkan tanggal (DD-MM-YYYY): ";
