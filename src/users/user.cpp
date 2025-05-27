@@ -91,10 +91,6 @@ void menuUser(ManagementSystem& sys) {
                         if (res == -1) { cout << "Tidak ada data untuk undo.\n"; continue; }
                         if (res == 1) break;
 
-                        res = inputField("Nomor Kursi: ", p.nomorKursi);
-                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
-                        if (res == 1) break;
-
                         res = inputField("Stasiun Asal: ", stasiunAsal);
                         if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
                         if (res == 1) break;
@@ -106,10 +102,14 @@ void menuUser(ManagementSystem& sys) {
                         res = inputField("Nama Kereta: ", kereta);
                         if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
                         if (res == 1) break;
-
-                        res = inputField("Tanggal Keberangkatan (DD-MM-YYYY): ", tanggal);
-                        if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
-                        if (res == 1) break;
+                        
+                        while (true) {
+                            res = inputField("Tanggal Keberangkatan (DD-MM-YYYY): ", tanggal);
+                            if (sys.getJadwalManager().isValidTanggal(tanggal)) break;
+                            cout << "Format tanggal tidak valid. Harus DD-MM-YYYY.\n";
+                            if (res == -1) { cout << "Undo ke input sebelumnya.\n"; continue; }
+                            if (res == 1) break;
+                        }
 
                         break;
                     }
@@ -121,8 +121,10 @@ void menuUser(ManagementSystem& sys) {
                     }
 
                     sys.getTiketManager().tampilkanJadwalByKode(p.kodeJadwal);
+                    p.nomorKursi = sys.getTiketManager().generateBangku();
+                    cout << "Nomor Kursi     : " << p.nomorKursi << "\n";
                     p.pnr = sys.getTiketManager().generatePNR();
-                    cout << "PNR yang digenerate: " << p.pnr << "\n";
+                    cout << "\nPNR yang digenerate: " << p.pnr << "\n";
 
                     // Simpan ke stack undo
                     undoStack.push(p);

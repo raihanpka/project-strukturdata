@@ -17,6 +17,12 @@ string TiketManager::generatePNR() const {
     return pnr;
 }
 
+string TiketManager::generateBangku() const {
+    int nomor = rand() % 100 + 1;
+    char huruf = 'A' + (rand() % 4);
+    return to_string(nomor) + huruf;
+}
+
 bool TiketManager::isSeatAvailable(const string& kodeJadwal, const string& seat) const {
     auto it = kursiTerpesan.find(kodeJadwal);
     if (it == kursiTerpesan.end()) return true;

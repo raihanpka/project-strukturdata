@@ -19,6 +19,7 @@ private:
 
 public:
     std::string generatePNR() const;
+    std::string generateBangku() const;
     bool isSeatAvailable(const std::string& kodeJadwal, const std::string& seat) const;
     std::string cariJadwalByPesanan(
         const std::string& asal,

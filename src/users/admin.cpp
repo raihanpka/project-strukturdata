@@ -167,19 +167,13 @@ void menuAdmin(ManagementSystem& sys) {
             case 3: {
                 string tanggal;
                 do {
-                    cout << "Masukkan tanggal (DD-MM-YYYY): ";
-                    cin.ignore();
-                    getline(cin, tanggal);
-                    
-                    // Memvalidasi format tanggal (DD-MM-YYYY)
-                    tm tm = {};
-                    istringstream ss(tanggal);
-                    ss >> get_time(&tm, "%d-%m-%Y");
-                    if (ss.fail()) {
-                        cout << "Format tanggal tidak valid. Gunakan format DD-MM-YYYY\n";
-                        continue;
+                    while (true) {
+                        cout << "Masukkan tanggal (DD-MM-YYYY): ";
+                        cin.ignore();
+                        getline(cin, tanggal);
+                        if (sys.getJadwalManager().isValidTanggal(tanggal)) break;
+                        cout << "Format tanggal tidak valid. Harus DD-MM-YYYY.\n";
                     }
-                    break;
                 } while(true);
                 sys.getJadwalManager().tampilkanJadwal(tanggal);
                 break;
