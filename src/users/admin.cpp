@@ -146,9 +146,11 @@ void menuAdmin(ManagementSystem& sys) {
                         cin.get();
                         sys.simpanKeFile();
                     } else if (subChoice == 4) {
+                        cout << "Kembali ke menu utama...\n";
                         break;
                     } else {
                         cout << "Pilihan tidak valid!\n";
+                        break;
                     }
                 } while (subChoice != 4);
                 break;
@@ -160,6 +162,7 @@ void menuAdmin(ManagementSystem& sys) {
                 cout << "Kelola Tiket Penumpang:\n";
                 cout << "1. Proses pemesanan tiket penumpang\n";
                 cout << "2. Cek antrian pemesanan\n";
+                cout << "3. Kembali\n";
                 cout << "Pilih: ";
                 int prosesPilihan;
                 cin >> prosesPilihan;
@@ -167,8 +170,12 @@ void menuAdmin(ManagementSystem& sys) {
                     sys.getTiketManager().prosesAntrianPesanan(); // Proses antrian tiket
                 } else if (prosesPilihan == 2) {
                     sys.getTiketManager().cekAntrianPesanan(); // Lihat antrian tiket
+                } else if (prosesPilihan == 3) {
+                    cout << "Kembali ke menu utama...\n";
+                    break;
                 } else {
                     cout << "Pilihan tidak valid!\n";
+                    break;
                 }
                 sys.simpanKeFile();
                 break;
@@ -177,7 +184,6 @@ void menuAdmin(ManagementSystem& sys) {
                 // Lihat Jadwal Kereta
                 sys.muatDariFile();
                 header();
-                cin.ignore();
                 string tanggal;
                 while (true) {
                         cout << "Masukkan tanggal (DD-MM-YYYY): ";

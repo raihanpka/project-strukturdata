@@ -38,9 +38,9 @@ void menuUser(ManagementSystem& sys) {
             case 1: {
                 sys.muatDariFile(); // Muat data terbaru dari file
                 header();
-                cin.ignore();
                 string tanggal;
                 while (true) {
+                    cin.ignore(); // Buang newline sebelumnya
                     cout << "Masukkan Tanggal (DD-MM-YYYY): ";
                     getline(cin, tanggal);
                     if (sys.getJadwalManager().isValidTanggal(tanggal)) {
@@ -58,7 +58,6 @@ void menuUser(ManagementSystem& sys) {
                 cin.ignore();
                 string pnr;
                 cout << "Masukkan PNR Tiket: ";
-                cin.ignore();
                 getline(cin, pnr);
                 if (pnr.empty()) {
                     cout << "PNR tidak boleh kosong!\n";
@@ -71,11 +70,10 @@ void menuUser(ManagementSystem& sys) {
             }
             case 3: {
                 header();
-                cin.ignore();
                 Stack<Pemesanan> undoStack;
                 Pemesanan p;
                 bool selesaiInput = false;
-
+                cin.ignore();
                 while (!selesaiInput) {
                     p = Pemesanan();
                     vector<Jadwal> daftar = sys.getJadwalManager().getJadwal();
@@ -90,8 +88,7 @@ void menuUser(ManagementSystem& sys) {
                     cout << "Pilihan: ";
                     int mode;
                     cin >> mode;
-                    cin.ignore();
-
+                    
                     string hasilPilihan;
                     vector<Jadwal> hasil;
                     if (mode == 1) hasil = sys.getTiketManager().tampilkanPilihanJadwal(daftar, "asal", hasilPilihan);
@@ -133,7 +130,6 @@ void menuUser(ManagementSystem& sys) {
                     cout << "\nPilih jadwal (nomor): ";
                     int idxJadwal;
                     cin >> idxJadwal;
-                    cin.ignore();
                     if (idxJadwal < 1 || idxJadwal > (int)hasil.size()) {
                         cout << "\nPilihan tidak valid!\n";
                         continue;

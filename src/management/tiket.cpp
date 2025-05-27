@@ -41,15 +41,15 @@ vector<Jadwal> TiketManager::tampilkanPilihanJadwal(const vector<Jadwal>& daftar
         string val;
         if (field == "Stasiun Asal") val = j.stasiunAsal;
         else if (field == "Stasiun Tujuan") val = j.stasiunTujuan;
-        else if (field == "kereta") val = j.namaKereta;
+        else if (field == "Kereta") val = j.namaKereta;
         if (find(opsi.begin(), opsi.end(), val) == opsi.end()) opsi.push_back(val);
     }
     // Tampilkan opsi ke user
-    cout << "\nPilih " << field << ":\n";
+    cout << "\nMasukkan " << field << ":\n";
     for (size_t i = 0; i < opsi.size(); ++i) {
         cout << i+1 << ". " << opsi[i] << endl;
     }
-    cout << "\nPilihan: ";
+    cout << "\nPilih opsi: ";
     int idx;
     cin >> idx;
     cin.ignore();
@@ -60,9 +60,9 @@ vector<Jadwal> TiketManager::tampilkanPilihanJadwal(const vector<Jadwal>& daftar
     hasilPilihan = opsi[idx-1];
     // Filter jadwal sesuai pilihan
     for (const auto& j : daftar) {
-        if ((field == "asal" && j.stasiunAsal == hasilPilihan) ||
-            (field == "tujuan" && j.stasiunTujuan == hasilPilihan) ||
-            (field == "kereta" && j.namaKereta == hasilPilihan)) {
+        if ((field == "Stasiun Asal" && j.stasiunAsal == hasilPilihan) ||
+            (field == "Stasiun Tujuan" && j.stasiunTujuan == hasilPilihan) ||
+            (field == "Kereta" && j.namaKereta == hasilPilihan)) {
             hasil.push_back(j);
         }
     }
