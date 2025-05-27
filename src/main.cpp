@@ -34,9 +34,9 @@ int main() {
             case 1: {
                 string username, password;
                 bool loginSukses = false;
+                cin.ignore();
                 do {
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cout << "Username Admin: ";
+                    cout << "\nUsername Admin: ";
                     getline(cin, username);
                     cout << "Password: ";
                     getline(cin, password);
@@ -46,7 +46,18 @@ int main() {
                     } else {
                         header();
                         cout << "Autentikasi gagal! Coba lagi.\n";
-                        cout << "Tekan ENTER untuk melanjutkan...\n";
+                        cout << "Tekan ENTER untuk mencoba ulang\n";
+                        cout << "Tekan 'b atau B' untuk kembali ke menu utama\n";
+                        string input;
+                        getline(cin, input);
+                        if ((input == "b") || (input == "B")) {
+                            loginSukses = true; 
+                            break;
+                        } else if (input.empty()) {
+                            continue; 
+                        } else {
+                            cout << "Input tidak valid. Silakan coba lagi.\n";
+                        }
                     }
                 } while (!loginSukses);
                 break;
