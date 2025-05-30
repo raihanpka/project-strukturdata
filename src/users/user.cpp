@@ -161,8 +161,8 @@ void menuUser(ManagementSystem& sys) {
                         if (!sys.getTiketManager().isSeatAvailable(pesananFinal.kodeJadwal, pesananFinal.nomorKursi)) {
                             cout << "Kursi tidak tersedia!\n";
                         } else {
-                            sys.getTiketManager().tambahKeAntrian(pesananFinal);
-                            cout << "\nPesanan telah masuk ke antrian.\n";
+                            sys.getTiketManager().tambahKeantrean(pesananFinal);
+                            cout << "\nPesanan telah masuk ke antrean.\n";
                         }
                         cout << "Tekan ENTER untuk melanjutkan...\n";
                         cin.get();

@@ -70,10 +70,10 @@ void FileIO::muatTiket(vector<Pemesanan>& tiketList,
     }
 }
 
-void FileIO::simpanAntrian(const Queue<Pemesanan>& antrianList, const string& path) {
+void FileIO::simpanantrean(const Queue<Pemesanan>& antreanList, const string& path) {
     ofstream out(path);
     out << "pnr,namaPenumpang,nomorKursi,kodeJadwal,confirmed\n";
-    Queue<Pemesanan> tempQueue = antrianList;
+    Queue<Pemesanan> tempQueue = antreanList;
     while (!tempQueue.isEmpty()) {
         Pemesanan t = tempQueue.peek();
         out << t.pnr << "," << t.namaPenumpang << "," << t.nomorKursi << ","
@@ -82,9 +82,9 @@ void FileIO::simpanAntrian(const Queue<Pemesanan>& antrianList, const string& pa
     }
 }
 
-void FileIO::muatAntrian(Queue<Pemesanan>& antrianList, const string& path) {
-    while (!antrianList.isEmpty()) {
-        antrianList.dequeue();
+void FileIO::muatantrean(Queue<Pemesanan>& antreanList, const string& path) {
+    while (!antreanList.isEmpty()) {
+        antreanList.dequeue();
     }
     ifstream in(path);
     string line;
@@ -100,6 +100,6 @@ void FileIO::muatAntrian(Queue<Pemesanan>& antrianList, const string& path) {
             !getline(ss, p.kodeJadwal, ',')) {
             continue;
         }
-        antrianList.enqueue(p);
+        antreanList.enqueue(p);
     }
 }

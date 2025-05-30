@@ -30,8 +30,8 @@ void menu_awal() {
     cout << BLUE << "\\____/ \\___/\\____/  \\_/ \\____/\\_|  |_/\\_| \\_/\\_| |_/\\___/ " << endl;
     cout << endl;
     cout << WHITE << "Halo, Selamat Datang di Aplikasi SISTEM KAI" << endl;
-    cout << WHITE << "1. Login sebagai Admin" << endl;
-    cout << WHITE << "2. Login sebagai Pengguna" << endl;
+    cout << WHITE << "1. Admin - Pengaturan Jadwal & Tiket" << endl;
+    cout << WHITE << "2. Layanan Tiket & Penumpang" << endl;
     cout << WHITE << "3. Exit" << endl;
     cout << WHITE << "Masukkan pilihanmu: ";
 }

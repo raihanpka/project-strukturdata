@@ -14,6 +14,6 @@ public:
                       std::unordered_map<std::string, std::unordered_set<std::string>>& kursiTerpesan,
                       const std::string& path);
 
-    static void simpanAntrian(const Queue<Pemesanan>& antrianList, const std::string& path);
-    static void muatAntrian(Queue<Pemesanan>& antrianList, const std::string& path);
+    static void simpanantrean(const Queue<Pemesanan>& antreanList, const std::string& path);
+    static void muatantrean(Queue<Pemesanan>& antreanList, const std::string& path);
 };

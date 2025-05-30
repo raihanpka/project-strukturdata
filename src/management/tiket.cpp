@@ -105,17 +105,17 @@ void TiketManager::tampilkanJadwalByKode(const string& kodeJadwal) const {
     }
 }
 
-// Menambah pesanan ke antrian (queue)
-void TiketManager::tambahKeAntrian(const Pemesanan& pemesanan) {
-    antrianPemesanan.enqueue(pemesanan);
+// Menambah pesanan ke antrean (queue)
+void TiketManager::tambahKeantrean(const Pemesanan& pemesanan) {
+    antreanPemesanan.enqueue(pemesanan);
 }
 
-// Memproses seluruh antrian pemesanan tiket
-void TiketManager::prosesAntrianPesanan() {
+// Memproses seluruh antrean pemesanan tiket
+void TiketManager::prosesantreanPesanan() {
     cin.ignore();
-    cout << "\nMemproses antrian pemesanan tiket...\n";
-    while (!antrianPemesanan.isEmpty()) {
-        Pemesanan p = antrianPemesanan.peek(); // Ambil pesanan paling depan
+    cout << "\nMemproses antrean pemesanan tiket...\n";
+    while (!antreanPemesanan.isEmpty()) {
+        Pemesanan p = antreanPemesanan.peek(); // Ambil pesanan paling depan
         if (isSeatAvailable(p.kodeJadwal, p.nomorKursi)) {
             p.confirmed = 1; // Tandai sudah dikonfirmasi
             daftarPemesanan.push_back(p); // Masukkan ke daftar pemesanan
@@ -146,29 +146,29 @@ void TiketManager::prosesAntrianPesanan() {
                 cout << "Tidak dapat menemukan kursi yang tersedia setelah " << maxPercobaan << " percobaan. Pesanan dibatalkan.\n";
             }
         }
-        antrianPemesanan.dequeue(); // Hapus dari antrian
+        antreanPemesanan.dequeue(); // Hapus dari antrean
     }
-    cout << "Semua antrian pemesanan telah diproses.\n";
+    cout << "Semua antrean pemesanan telah diproses.\n";
     cout << "Tekan ENTER untuk melanjutkan...";
     cin.get();
 }
 
-// Menampilkan seluruh antrian pemesanan tiket
+// Menampilkan seluruh antrean pemesanan tiket
 extern vector<Jadwal> daftarJadwal;
-void TiketManager::cekAntrianPesanan() const {
-    if (antrianPemesanan.isEmpty()) {
-        cout << "Antrian pemesanan kosong.\n";
+void TiketManager::cekantreanPesanan() const {
+    if (antreanPemesanan.isEmpty()) {
+        cout << "antrean pemesanan kosong.\n";
         cout << "\nTekan ENTER untuk melanjutkan...";
         cin.ignore();
         cin.get();
     } else {
         cin.ignore();
-        cout << "\nDaftar Antrian Pemesanan Tiket\n";
+        cout << "\nDaftar antrean Pemesanan Tiket\n";
         cout << "+-----+----------------------+----------------------+--------------------------+-------------+-------------+------------+\n"
              << "| No  | Nama Penumpang       | Kode Jadwal          | Nama Kereta              | Berangkat   | Tiba        | Kursi      |\n"
              << "+-----+----------------------+----------------------+--------------------------+-------------+-------------+------------+\n";
         int no = 1;
-        auto curr = antrianPemesanan.getFront(); // Mulai dari node depan queue
+        auto curr = antreanPemesanan.getFront(); // Mulai dari node depan queue
         while (curr != nullptr) {
             Pemesanan p = curr->data;
             string namaKereta = "-", waktuBerangkat = "-", waktuTiba = "-";
@@ -234,11 +234,11 @@ unordered_map<string, unordered_set<string>>& TiketManager::getMutableKursiTerpe
     return kursiTerpesan;
 }
 
-// Getter antrian pesanan (read-only)
-const Queue<Pemesanan>& TiketManager::getAntrianPesanan() const {
-    return antrianPemesanan;
+// Getter antrean pesanan (read-only)
+const Queue<Pemesanan>& TiketManager::getantreanPesanan() const {
+    return antreanPemesanan;
 }
-// Getter antrian pesanan (mutable)
-Queue<Pemesanan>& TiketManager::getMutableAntrian() {
-    return antrianPemesanan;
+// Getter antrean pesanan (mutable)
+Queue<Pemesanan>& TiketManager::getMutableantrean() {
+    return antreanPemesanan;
 }

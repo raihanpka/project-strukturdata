@@ -160,16 +160,16 @@ void menuAdmin(ManagementSystem& sys) {
                 cin.ignore();
                 // Kelola Tiket Penumpang
                 cout << "Kelola Tiket Penumpang:\n";
-                cout << "1. Proses pemesanan tiket penumpang\n";
-                cout << "2. Cek antrian pemesanan\n";
+                cout << "1. Cek antrean pemesanan\n";
+                cout << "2. Proses pemesanan tiket penumpang\n";
                 cout << "3. Kembali\n";
                 cout << "Pilih: ";
                 int prosesPilihan;
                 cin >> prosesPilihan;
                 if (prosesPilihan == 1) {
-                    sys.getTiketManager().prosesAntrianPesanan(); // Proses antrian tiket
+                    sys.getTiketManager().cekantreanPesanan(); // Lihat antrean tiket
                 } else if (prosesPilihan == 2) {
-                    sys.getTiketManager().cekAntrianPesanan(); // Lihat antrian tiket
+                    sys.getTiketManager().prosesantreanPesanan(); // Proses antrean tiket
                 } else if (prosesPilihan == 3) {
                     cout << "Kembali ke menu utama...\n";
                     break;
